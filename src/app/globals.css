@@ -4,33 +4,34 @@
 
 @layer base {
   :root {
-    --background: 220 13% 95%; /* Light Grey #F0F2F5 */
-    --foreground: 240 10% 3.9%; /* Default dark text */
+    /* New Color Scheme - Light Mode */
+    --background: 216 67% 98%; /* #F9FAFB */
+    --foreground: 215 28% 17%; /* #1F2937 */
 
     --card: 0 0% 100%; /* White */
-    --card-foreground: 240 10% 3.9%;
+    --card-foreground: 215 28% 17%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
+    --popover-foreground: 215 28% 17%;
 
-    --primary: 231 48% 48%; /* Deep Blue #3F51B5 */
+    --primary: 217 91% 60%; /* #3B82F6 */
     --primary-foreground: 0 0% 98%; /* White text on primary */
 
-    --secondary: 220 13% 90%; /* Slightly darker grey for secondary elements */
-    --secondary-foreground: 240 10% 9%; /* Dark text on secondary */
+    --secondary: 217 94% 67%; /* #60A5FA */
+    --secondary-foreground: 215 28% 17%; /* Dark text on this lighter blue */
 
-    --muted: 220 13% 88%; /* Muted grey */
-    --muted-foreground: 240 5% 45.1%; /* Muted text */
+    --muted: 220 20% 94%; /* Lighter muted gray */
+    --muted-foreground: 215 15% 45%; /* Muted text */
 
-    --accent: 260 46% 55%; /* Vibrant Purple #7E57C2 */
-    --accent-foreground: 0 0% 98%; /* White text on accent */
+    --accent: 217 91% 60%; /* #3B82F6 (same as primary for light mode) */
+    --accent-foreground: 0 0% 98%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 220 13% 85%; /* Slightly darker than muted for borders */
-    --input: 220 13% 85%;  /* Same as border for input background */
-    --ring: 231 48% 48%; /* Primary color for focus rings */
+    --border: 216 30% 90%; /* Border for light mode */
+    --input: 216 30% 90%;  /* Input background for light mode */
+    --ring: 217 91% 60%; /* Primary color for focus rings */
 
     --radius: 0.5rem;
 
@@ -48,36 +49,43 @@
     --sidebar-accent-foreground: 240 10% 3.9%;
     --sidebar-border: 220 13% 80%;
     --sidebar-ring: 231 48% 48%;
+
+    /* Glow Animation Colors - Light Mode */
+    --btn-glow-color: hsl(217, 94%, 67%); /* #60A5FA */
+    --bg-glow-start-color: hsl(219, 93%, 93%); /* #DBEAFE */
+    --bg-glow-end-color: hsl(216, 67%, 98%); /* #F9FAFB */
+    --bg-glow-accent-color: hsl(217, 94%, 67%); /* #60A5FA - For potential use if needed */
   }
 
   .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 220 13% 95%;
+    /* New Color Scheme - Dark Mode */
+    --background: 215 28% 17%; /* #1F2937 */
+    --foreground: 216 67% 98%; /* #F9FAFB */
 
-    --card: 240 10% 5.9%; 
-    --card-foreground: 220 13% 95%;
+    --card: 215 28% 22%; /* Slightly lighter dark for cards */
+    --card-foreground: 216 67% 98%;
 
-    --popover: 240 10% 5.9%;
-    --popover-foreground: 220 13% 95%;
+    --popover: 215 28% 10%;
+    --popover-foreground: 216 67% 98%;
 
-    --primary: 231 48% 48%; 
+    --primary: 217 91% 60%; /* #3B82F6 (Consistent primary) */
     --primary-foreground: 0 0% 98%;
 
-    --secondary: 240 5% 14.9%;
-    --secondary-foreground: 220 13% 95%;
+    --secondary: 217 94% 67%; /* #60A5FA (Consistent secondary) */
+    --secondary-foreground: 215 28% 17%; /* Dark text on this lighter blue */
+    
+    --muted: 215 28% 25%; /* Muted dark gray */
+    --muted-foreground: 215 15% 65%; /* Muted light text */
 
-    --muted: 240 5% 14.9%;
-    --muted-foreground: 220 10% 63.9%;
+    --accent: 217 94% 67%; /* #60A5FA */
+    --accent-foreground: 215 28% 17%; /* Dark text on this lighter blue */
 
-    --accent: 260 46% 55%; 
-    --accent-foreground: 0 0% 98%;
-
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 72.2% 50.6%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 240 5% 14.9%;
-    --input: 240 5% 14.9%;
-    --ring: 231 48% 48%;
+    --border: 215 28% 25%; /* Border for dark mode */
+    --input: 215 28% 25%; /* Input background for dark mode */
+    --ring: 217 94% 67%; /* Accent color for focus rings in dark */
     
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
@@ -93,6 +101,12 @@
     --sidebar-accent-foreground: 220 13% 95%;
     --sidebar-border: 240 5% 10%;
     --sidebar-ring: 231 48% 48%;
+
+    /* Glow Animation Colors - Dark Mode */
+    --btn-glow-color: hsl(214, 96%, 78%); /* #93C5FD */
+    --bg-glow-start-color: hsl(224, 65%, 20%); /* Darker shade of #1E3A8A */
+    --bg-glow-end-color: hsl(215, 28%, 17%); /* #1F2937 */
+    --bg-glow-accent-color: hsl(217, 94%, 67%); /* #60A5FA */
   }
 }
 
@@ -101,6 +115,106 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-roboto text-base leading-relaxed; /* Default 16px, line-height 1.5 approx */
+    /* Background Glow Effect */
+    position: relative;
+  }
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    background: radial-gradient(ellipse at center, var(--bg-glow-start-color) 0%, var(--bg-glow-end-color) 70%);
+    animation: pulse-background 6s infinite ease-in-out alternate; /* Slower than button for subtlety */
+  }
+  .dark body::before {
+     background: radial-gradient(ellipse at center, var(--bg-glow-start-color) 0%, var(--bg-glow-accent-color) 30%, var(--bg-glow-end-color) 70%);
+     animation: pulse-background-dark 6s infinite ease-in-out alternate;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading font-semibold; /* Poppins will be font-heading */
+  }
+  h1 { @apply text-3xl md:text-4xl; } /* approx 30px, 36px */
+  h2 { @apply text-2xl md:text-3xl; } /* approx 24px, 30px */
+  h3 { @apply text-xl md:text-2xl; } /* approx 20px, 24px */
+  /* Add more heading styles if needed */
+
+  /* Button base styles for hover opacity */
+  .btn-base-hover {
+    @apply transition-opacity duration-300 hover:opacity-80;
+  }
+}
+
+@layer components {
+  .btn-glow {
+    @apply relative overflow-hidden;
+  }
+  .btn-glow::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(
+      transparent,
+      transparent,
+      var(--btn-glow-color),
+      transparent,
+      transparent
+    );
+    animation: rotate-glow 3s linear infinite;
+  }
+  .btn-glow::after {
+    content: "";
+    position: absolute;
+    inset: 2px; /* Adjust for border thickness */
+    background: hsl(var(--background)); /* Button's actual background */
+    @apply rounded-md; /* Match button's border radius */
+  }
+  .btn-glow > :not(span.sr-only):not(svg ~ span):not(svg) { /* Selects direct children that are not screen reader only spans or specific icon setups */
+    @apply relative z-10;
+  }
+   /* Ensure text and icons inside the button are visible above the ::after layer */
+  .btn-glow > span, .btn-glow > svg, .btn-glow > div {
+    @apply relative z-10;
+  }
+
+
+  .btn-glow:hover::before {
+    animation-duration: 1s;
+    filter: brightness(1.2);
+  }
+}
+
+@keyframes rotate-glow {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse-background {
+  0% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes pulse-background-dark {
+  0% {
+    opacity: 0.6;
+    background: radial-gradient(ellipse at center, var(--bg-glow-start-color) 0%, var(--bg-glow-accent-color) 20%, var(--bg-glow-end-color) 70%);
+  }
+  100% {
+    opacity: 0.9;
+     background: radial-gradient(ellipse at center, var(--bg-glow-start-color) 0%, var(--bg-glow-accent-color) 40%, var(--bg-glow-end-color) 70%);
   }
 }

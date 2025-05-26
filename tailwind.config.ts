@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import defaultTheme from 'tailwindcss/defaultTheme';
 
 export default {
     darkMode: ["class"],
@@ -9,6 +10,12 @@ export default {
   ],
   theme: {
   	extend: {
+      fontFamily: {
+        sans: ['var(--font-roboto)', ...defaultTheme.fontFamily.sans],
+        heading: ['var(--font-poppins)', ...defaultTheme.fontFamily.sans],
+        roboto: ['var(--font-roboto)'], // Added for explicit use
+        poppins: ['var(--font-poppins)'], // Added for explicit use
+      },
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
@@ -82,11 +89,26 @@ export default {
   				to: {
   					height: '0'
   				}
-  			}
+  			},
+        'rotate-glow': {
+          '0%': { transform: 'rotate(0deg)' },
+          '100%': { transform: 'rotate(360deg)' },
+        },
+        'pulse-background': {
+          '0%': { opacity: '0.7' },
+          '100%': { opacity: '1' },
+        },
+         'pulse-background-dark': {
+          '0%': { opacity: '0.6', background: 'radial-gradient(ellipse at center, var(--bg-glow-start-color) 0%, var(--bg-glow-accent-color) 20%, var(--bg-glow-end-color) 70%)' },
+          '100%': { opacity: '0.9', background: 'radial-gradient(ellipse at center, var(--bg-glow-start-color) 0%, var(--bg-glow-accent-color) 40%, var(--bg-glow-end-color) 70%)' },
+        }
   		},
   		animation: {
   			'accordion-down': 'accordion-down 0.2s ease-out',
-  			'accordion-up': 'accordion-up 0.2s ease-out'
+  			'accordion-up': 'accordion-up 0.2s ease-out',
+        'rotate-glow': 'rotate-glow 3s linear infinite',
+        'pulse-background': 'pulse-background 6s infinite ease-in-out alternate',
+        'pulse-background-dark': 'pulse-background-dark 6s infinite ease-in-out alternate',
   		}
   	}
   },

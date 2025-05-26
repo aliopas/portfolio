@@ -56,31 +56,31 @@ export default function PortfolioPage() {
   return (
     <div className="space-y-8">
       <header className="text-center">
-        <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-primary">My Portfolio</h1>
+        <h1 className="text-primary">My Portfolio</h1>
         <p className="mt-2 text-lg text-muted-foreground">
           A collection of my projects, showcasing my skills and passion for development.
         </p>
       </header>
 
       {/* Filtering (placeholder UI) */}
-      <div className="flex flex-col sm:flex-row gap-4 items-center justify-between p-4 bg-card rounded-lg shadow">
-        <h3 className="text-lg font-semibold">Filter Projects</h3>
-        <div className="flex gap-2">
-          <Button variant="outline" size="sm"><Filter className="mr-2 h-4 w-4" />Category</Button>
-          <Button variant="outline" size="sm">Technology</Button>
+      <div className="flex flex-col sm:flex-row gap-4 items-center justify-center p-4 bg-card rounded-lg shadow">
+        <h3 className="text-lg font-semibold sr-only sm:not-sr-only">Filter Projects</h3>
+        <div className="flex flex-wrap gap-2 justify-center">
+          <Button variant="outline" size="sm" className="btn-glow btn-base-hover"><Filter className="mr-2 h-4 w-4" />Category</Button>
+          <Button variant="outline" size="sm" className="btn-glow btn-base-hover">Technology</Button>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {projects.map((project) => (
-          <Card key={project.id} className="flex flex-col overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300">
+          <Card key={project.id} className="group flex flex-col overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:scale-105">
             <CardHeader className="p-0 relative">
               <Image
                 src={project.imageUrl}
                 alt={project.title}
                 width={600}
-                height={400}
-                className="object-cover w-full h-56"
+                height={400} // Consistent with placeholder aspect ratio, actual display height controlled by h-56
+                className="object-cover w-full h-56" // h-56 maintains uniform card height
                 data-ai-hint={project.imageHint}
               />
               <div className="absolute top-2 right-2 bg-primary/80 text-primary-foreground px-2 py-1 text-xs rounded">
@@ -103,15 +103,15 @@ export default function PortfolioPage() {
             </CardContent>
             <CardFooter className="p-6 bg-muted/50 border-t">
               <div className="flex justify-between w-full gap-2">
-                <Button variant="outline" size="sm" asChild>
+                <Button variant="outline" size="sm" asChild className="btn-glow btn-base-hover">
                   <Link href={project.githubLink} target="_blank" rel="noopener noreferrer">GitHub</Link>
                 </Button>
                 {project.liveLink ? (
-                  <Button size="sm" asChild>
+                  <Button size="sm" asChild className="btn-glow btn-base-hover">
                     <Link href={project.liveLink} target="_blank" rel="noopener noreferrer">Live Demo <ArrowRight className="ml-1 h-4 w-4" /></Link>
                   </Button>
                 ) : (
-                  <Button size="sm" disabled>Live Demo</Button>
+                  <Button size="sm" disabled className="btn-base-hover">Live Demo</Button>
                 )}
               </div>
             </CardFooter>
