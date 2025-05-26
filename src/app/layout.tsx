@@ -30,8 +30,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning><body className={`${poppins.variable} ${roboto.variable} font-roboto antialiased flex flex-col min-h-screen`}>
-        {/* suppressHydrationWarning for <html> is important for theme switching with ThemeProvider */}
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${poppins.variable} ${roboto.variable} font-roboto antialiased flex flex-col min-h-screen`}>
         <ThemeProvider>
           <Navbar />
           <main className="flex-grow container py-8 md:py-12">
@@ -40,6 +40,7 @@ export default function RootLayout({
           <Footer />
           <Toaster />
         </ThemeProvider>
-      </body></html>
+      </body>
+    </html>
   );
 }
