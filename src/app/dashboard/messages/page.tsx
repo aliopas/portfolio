@@ -13,7 +13,7 @@ import { format, parseISO } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { cn } from "@/lib/utils"; // Added import for cn
+import { cn } from "@/lib/utils";
 
 
 export default function ManageMessagesPage() {
@@ -25,34 +25,59 @@ export default function ManageMessagesPage() {
 
   const { toast } = useToast();
 
-  const handleViewMessage = (message: Message) => {
-    setSelectedMessage(message);
-    setIsViewDialogOpen(true);
-    // Mark as read if it's not already
-    if (!message.read) {
+  const handleViewMessage = (messageToView: Message) => {
+    let messageForDialog = messageToView; 
+
+    if (!messageToView.read) {
+      // If unread, create an updated version for the dialog and the list
+      const updatedVersion = { ...messageToView, read: true };
       setMessages(prevMessages =>
         prevMessages.map(msg =>
-          msg.id === message.id ? { ...msg, read: true } : msg
+          msg.id === messageToView.id ? updatedVersion : msg
         )
       );
+      // Ensure the dialog also sees it as read immediately
+      messageForDialog = updatedVersion;
     }
+
+    setSelectedMessage(messageForDialog); 
+    setIsViewDialogOpen(true); 
   };
 
   const handleDeleteMessage = (messageId: string) => {
-    // Confirmation can be added here
     setMessages(messages.filter(msg => msg.id !== messageId));
     toast({
       title: "Message Deleted",
       description: "The message has been removed.",
     });
+     // If deleting the selected message, close the dialog
+    if (selectedMessage && selectedMessage.id === messageId) {
+        setIsViewDialogOpen(false);
+        setSelectedMessage(null);
+    }
   };
   
   const handleToggleReadStatus = (messageId: string) => {
+    let newReadStateForSelectedMessage: boolean | undefined;
+
     setMessages(prevMessages =>
-      prevMessages.map(msg =>
-        msg.id === messageId ? { ...msg, read: !msg.read } : msg
-      )
+      prevMessages.map(msg => {
+        if (msg.id === messageId) {
+          const newReadState = !msg.read;
+          // If this is the selected message, capture its new read state
+          if (selectedMessage && selectedMessage.id === messageId) {
+            newReadStateForSelectedMessage = newReadState;
+          }
+          return { ...msg, read: newReadState };
+        }
+        return msg;
+      })
     );
+    
+    // If the currently selected message is the one being toggled, update its state for the dialog too
+    if (selectedMessage && selectedMessage.id === messageId && newReadStateForSelectedMessage !== undefined) {
+      setSelectedMessage(prev => prev ? {...prev, read: newReadStateForSelectedMessage!} : null);
+    }
   };
 
 
@@ -135,7 +160,7 @@ export default function ManageMessagesPage() {
                   <TableRow key={message.id} className={cn(!message.read && "bg-primary/5 font-medium")}>
                     <TableCell>
                       {!message.read ? (
-                        <Badge variant="default" className="bg-blue-500 hover:bg-blue-600">New</Badge>
+                        <Badge variant="default">New</Badge>
                       ) : (
                         <Badge variant="outline">Read</Badge>
                       )}
@@ -207,3 +232,4 @@ export default function ManageMessagesPage() {
     </div>
   );
 }
+
