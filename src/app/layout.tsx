@@ -30,7 +30,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning> {/* suppressHydrationWarning is important for theme switching */}
+    <html lang="en" suppressHydrationWarning>
+      {/* suppressHydrationWarning is important for theme switching, moved comment here */}
       <body className={`${poppins.variable} ${roboto.variable} font-roboto antialiased flex flex-col min-h-screen`}>
         <ThemeProvider>
           <Navbar />
