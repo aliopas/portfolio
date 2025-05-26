@@ -17,19 +17,29 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const router = useRouter();
 
+  // Fetch admin credentials from environment variables
+  const adminEmail = process.env.NEXT_PUBLIC_ADMIN_EMAIL;
+  const adminPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD;
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsLoading(true);
     setError('');
 
+    // Simulate API call delay
     await new Promise(resolve => setTimeout(resolve, 1000));
 
-    // Admin credentials
-    if (email === "admin@example.com" && password === "password") {
+    if (!adminEmail || !adminPassword) {
+      setError('Admin credentials are not configured. Please contact support.');
+      setIsLoading(false);
+      return;
+    }
+
+    if (email === adminEmail && password === adminPassword) {
       localStorage.setItem('isMockLoggedIn', 'true'); 
       router.push('/dashboard'); 
     } else {
-      setError('Invalid email or password. (Hint: admin@example.com / password)');
+      setError('Invalid email or password.');
       localStorage.removeItem('isMockLoggedIn');
     }
     setIsLoading(false);
@@ -49,7 +59,7 @@ export default function LoginPage() {
               <Input 
                 id="email" 
                 type="email" 
-                placeholder="admin@example.com" 
+                placeholder="Enter your admin email" 
                 required 
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -60,14 +70,14 @@ export default function LoginPage() {
               <Input 
                 id="password" 
                 type="password" 
-                placeholder="password" 
+                placeholder="Enter your admin password" 
                 required 
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
             {error && <p className="text-sm text-destructive">{error}</p>}
-            <div className="flex items-center justify-end text-sm"> {/* Adjusted to remove "Remember me" and align "Forgot password" */}
+            <div className="flex items-center justify-end text-sm">
               <Link href="#" className="font-medium text-primary hover:underline">
                 Forgot password?
               </Link>
@@ -85,7 +95,6 @@ export default function LoginPage() {
               )}
               Login
             </Button>
-            {/* Sign up link removed */}
           </CardFooter>
         </form>
       </Card>
