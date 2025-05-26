@@ -30,12 +30,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning><head />
+    <html lang="en" suppressHydrationWarning><head /> 
       {/* Explicit empty head; Next.js metadata API will populate it. suppressHydrationWarning for <html> is important for theme switching. */}
       <body className={`${poppins.variable} ${roboto.variable} font-roboto antialiased flex flex-col min-h-screen`}>
         <ThemeProvider>
           <Navbar />
-          <main className="flex-grow container py-8 md:py-12">
+          <main className="flex-grow container mx-auto py-8 md:py-12 px-4 sm:px-6 lg:px-8">
             {children}
           </main>
           <Footer />

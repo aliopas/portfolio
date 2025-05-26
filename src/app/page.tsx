@@ -42,14 +42,13 @@ export default function Home() {
     <div className="space-y-16">
       {/* Hero Section */}
       <section className="text-center py-16 md:py-24 bg-card rounded-lg shadow-lg">
-        {/* Removed nested container div from here */}
-        <h1 className="text-primary px-4 sm:px-6 md:px-8"> {/* Added horizontal padding directly if needed, or rely on outer container */}
+        <h1 className="text-primary"> 
           Welcome to AliAlaa's Portfolio
         </h1>
-        <p className="mt-4 text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto px-4 sm:px-6 md:px-8">
+        <p className="mt-4 text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
           Showcase your skills, projects, and journey as a developer. Connect, create, and inspire with a portfolio that truly represents you.
         </p>
-        <div className="mt-8 flex flex-col sm:flex-row justify-center items-center gap-4 px-4 sm:px-6 md:px-8">
+        <div className="mt-8 flex flex-col sm:flex-row justify-center items-center gap-4">
           <Button asChild size="lg" className="btn-glow btn-base-hover">
             <Link href="/portfolio">View My Work <ArrowRight className="ml-2 h-5 w-5" /></Link>
           </Button>
@@ -75,8 +74,8 @@ export default function Home() {
                   src={project.imageUrl}
                   alt={project.title}
                   width={600}
-                  height={160} // Adjusted height to 160px (h-40)
-                  className="object-cover w-full h-40" // Use h-40 for 10rem/160px
+                  height={160} // Consistent height h-40 (10rem/160px)
+                  className="object-cover w-full h-40" 
                   data-ai-hint={project.imageHint}
                 />
               </CardHeader>
@@ -108,7 +107,7 @@ export default function Home() {
 
       {/* AI Tool Teaser Section */}
       <section className="py-12 bg-ai-tool-gradient">
-        <div className="container text-center"> {/* This container is fine as it's for centering content within a full-bleed section background */}
+        <div className="text-center"> {/* Removed container from here, relies on main layout's container + padding */}
           <Lightbulb className="h-12 w-12 mx-auto mb-4 text-background" />
           <h2 className="text-3xl font-bold tracking-tight mb-4 text-primary-foreground">
             Craft Perfect Project Descriptions with AI
