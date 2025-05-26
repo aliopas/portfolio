@@ -6,7 +6,7 @@
 @layer base {
   :root {
     /* Light Mode - Updated Color Scheme */
-    --background: 210 17% 98%; /* #F9FAFB */
+    --background: 210 30% 96%; /* #F0F4F8 - New light grayish blue background */
     --foreground: 215 28% 21%; /* #1F2937 */
 
     --card: 0 0% 100%;
@@ -54,7 +54,7 @@
     /* Glow Animation Colors - Light Mode */
     --btn-glow-color: hsl(217, 94%, 75%); /* Lighter version of #3B82F6 for glow */
     --bg-glow-start-color: hsl(217, 80%, 93%); /* #DBEAFE */
-    --bg-glow-end-color: hsl(210, 17%, 98%);   /* #F9FAFB */
+    --bg-glow-end-color: hsl(210, 30%, 96%);   /* #F0F4F8 - Matches new background */
     --bg-glow-accent-color: hsl(217, 91%, 70%); /* Accent for glow based on primary */
 
     /* AI Tool Specific Gradient Colors - Light Mode */
@@ -135,7 +135,7 @@
     right: 0;
     bottom: 0;
     z-index: -1;
-    background: radial-gradient(ellipse at center, var(--bg-glow-start-color) 0%, var(--bg-glow-end-color) 70%);
+    background: radial-gradient(ellipse at center, var(--bg-glow-start-color) 0%, var(--bg-glow-accent-color) 30%, var(--bg-glow-end-color) 70%);
     animation: pulse-background 6s infinite ease-in-out alternate; 
   }
   .dark body::before {
@@ -159,17 +159,13 @@
 @layer components {
   .btn-glow {
     @apply relative overflow-hidden;
-    /* Force text color to contrast with ::after's background (hsl(var(--background))) */
-    /* This applies to direct text children of the button. */
-    color: hsl(var(--foreground)) !important;
+    color: hsl(var(--foreground)) !important; /* Ensures text is always foreground color */
   }
   .btn-glow svg {
-    /* Ensure SVGs inherit the forced color from .btn-glow */
-    color: currentColor !important;
+    color: currentColor !important; /* Ensures SVGs inherit the forced color */
   }
    .btn-glow > span {
-    /* Ensure spans inside .btn-glow also get the forced color, overriding other text utilities */
-    color: hsl(var(--foreground)) !important;
+    color: hsl(var(--foreground)) !important; /* Ensures spans also get the forced color */
   }
 
   .btn-glow::before { /* Rotating conic gradient - must be behind ::after and content */
@@ -202,8 +198,6 @@
   .btn-glow > :not(span.sr-only):not(svg ~ span):not(svg) { 
     @apply relative z-10;
   }
-  /* The explicit color settings above for .btn-glow, .btn-glow svg, and .btn-glow > span handle content color. */
-  /* These z-index rules ensure content is visually on top. */
   .btn-glow > span, .btn-glow > svg, .btn-glow > div { 
     @apply relative z-10;
   }
@@ -247,10 +241,12 @@
 
 @keyframes pulse-background {
   0% {
-    opacity: 0.6; 
+    opacity: 0.6;
+    background: radial-gradient(ellipse at center, var(--bg-glow-start-color) 0%, var(--bg-glow-accent-color) 20%, var(--bg-glow-end-color) 70%);
   }
   100% {
-    opacity: 0.9; 
+    opacity: 0.9;
+    background: radial-gradient(ellipse at center, var(--bg-glow-start-color) 0%, var(--bg-glow-accent-color) 40%, var(--bg-glow-end-color) 70%);
   }
 }
 @keyframes pulse-background-dark {
@@ -273,4 +269,3 @@
   0% { opacity: 0.3; transform: scale(1); }
   100% { opacity: 0.6; transform: scale(1.05); }
 }
-
