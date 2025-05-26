@@ -1,7 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, Lightbulb, Code } from "lucide-react";
+import { ArrowRight } from "lucide-react"; // Removed Lightbulb, Code icons
 import Image from "next/image";
 import Link from "next/link";
 import { projectsData } from "@/data/mockData";
@@ -14,19 +14,21 @@ export default function Home() {
     <div className="space-y-16">
       {/* Hero Section */}
       <section className="text-center py-16 md:py-24 bg-card rounded-lg shadow-lg">
-        <h1 className="text-primary px-4 sm:px-0"> 
-          Welcome to AliAlaa's Portfolio
-        </h1>
-        <p className="mt-4 text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto px-4 sm:px-0">
-          Showcase your skills, projects, and journey as a developer. Connect, create, and inspire with a portfolio that truly represents you.
-        </p>
-        <div className="mt-8 flex flex-col sm:flex-row justify-center items-center gap-4 px-4 sm:px-0">
-          <Button asChild size="lg" className="btn-glow btn-base-hover">
-            <Link href="/portfolio">View My Work <ArrowRight className="ml-2 h-5 w-5" /></Link>
-          </Button>
-          <Button asChild variant="outline" size="lg" className="btn-glow btn-base-hover">
-            <Link href="/contact">Get In Touch</Link>
-          </Button>
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8"> {/* Added container and padding for consistency */}
+          <h1 className="text-primary px-4 sm:px-0">
+            Welcome to AliAlaa's Portfolio
+          </h1>
+          <p className="mt-4 text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto px-4 sm:px-0">
+            Showcase your skills, projects, and journey as a developer. Connect, create, and inspire with a portfolio that truly represents you.
+          </p>
+          <div className="mt-8 flex flex-col sm:flex-row justify-center items-center gap-4 px-4 sm:px-0">
+            <Button asChild size="lg" className="btn-glow btn-base-hover">
+              <Link href="/portfolio">View My Work <ArrowRight className="ml-2 h-5 w-5" /></Link>
+            </Button>
+            <Button asChild variant="outline" size="lg" className="btn-glow btn-base-hover">
+              <Link href="/contact">Get In Touch</Link>
+            </Button>
+          </div>
         </div>
       </section>
 
@@ -47,7 +49,7 @@ export default function Home() {
                   alt={project.title}
                   width={600}
                   height={160} // Consistent height h-40 (10rem/160px)
-                  className="object-cover w-full h-40" 
+                  className="object-cover w-full h-40"
                   data-ai-hint={project.imageHint}
                 />
               </CardHeader>
@@ -86,26 +88,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* AI Tool Teaser Section */}
-      <section className="py-12 bg-ai-tool-gradient">
-        <div className="text-center"> {/* Removed container from here, relies on main layout's container + padding */}
-          <Lightbulb className="h-12 w-12 mx-auto mb-4 text-primary-foreground" />
-          <h2 className="text-3xl font-bold tracking-tight mb-4 text-primary-foreground">
-            Craft Perfect Project Descriptions with AI
-          </h2>
-          <p className="text-lg text-primary-foreground/90 max-w-2xl mx-auto mb-8">
-            Struggling to describe your amazing projects? Let our AI tool help you generate compelling descriptions based on your project's features and technologies.
-          </p>
-          <Button 
-            variant="secondary" 
-            size="lg" 
-            asChild 
-            className="bg-background text-primary hover:bg-background/90 btn-glow btn-base-hover"
-          >
-            <Link href="/ai-project-description">Try the AI Tool <Code className="ml-2 h-5 w-5" /></Link>
-          </Button>
-        </div>
-      </section>
+      {/* AI Tool Teaser Section Removed */}
     </div>
   );
 }

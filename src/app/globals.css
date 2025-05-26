@@ -41,7 +41,7 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
-    
+
     --sidebar-background: 220 13% 92%;
     --sidebar-foreground: 240 10% 3.9%;
     --sidebar-primary: 217 91% 55%; /* Adjusted primary for sidebar */
@@ -57,9 +57,7 @@
     --bg-glow-end-color: hsl(210, 30%, 96%);   /* #F0F4F8 - Matches new background */
     --bg-glow-accent-color: hsl(217, 91%, 70%); /* Accent for glow based on primary */
 
-    /* AI Tool Specific Gradient Colors - Light Mode */
-    --ai-tool-gradient-start: 221 60% 40%; /* #1E40AF */
-    --ai-tool-gradient-end: 217 91% 60%; /* #3B82F6 */
+    /* AI Tool Specific Gradient Colors - Light Mode - REMOVED */
   }
 
   .dark {
@@ -78,7 +76,7 @@
 
     --secondary: 217 94% 68%; /* #60A5FA - consistent for secondary actions */
     --secondary-foreground: 215 28% 17%; /* Dark text on light secondary */
-    
+
     --muted: 222 47% 25%;
     --muted-foreground: 220 10% 60%;
 
@@ -88,10 +86,10 @@
     --destructive: 0 72.2% 50.6%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 222 47% 25%; 
-    --input: 222 47% 25%; 
+    --border: 222 47% 25%;
+    --input: 222 47% 25%;
     --ring: 217 94% 68%; /* Accent color for focus rings in dark */
-    
+
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
@@ -113,9 +111,7 @@
     --bg-glow-end-color: hsl(215, 28%, 21%);   /* #1F2937 */
     --bg-glow-accent-color: hsl(217, 94%, 68%); /* Glowing blue accent #60A5FA */
 
-    /* AI Tool Specific Gradient Colors - Dark Mode */
-    --ai-tool-gradient-start: 222 47% 15%; /* #1E3A8A */
-    --ai-tool-gradient-end: 217 94% 68%; /* #60A5FA */
+    /* AI Tool Specific Gradient Colors - Dark Mode - REMOVED */
   }
 }
 
@@ -136,7 +132,7 @@
     bottom: 0;
     z-index: -1;
     background: radial-gradient(ellipse at center, var(--bg-glow-start-color) 0%, var(--bg-glow-accent-color) 30%, var(--bg-glow-end-color) 70%);
-    animation: pulse-background 6s infinite ease-in-out alternate; 
+    animation: pulse-background 6s infinite ease-in-out alternate;
   }
   .dark body::before {
      background: radial-gradient(ellipse at center, var(--bg-glow-start-color) 0%, var(--bg-glow-accent-color) 30%, var(--bg-glow-end-color) 70%);
@@ -144,11 +140,11 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-heading font-semibold; 
+    @apply font-heading font-semibold;
   }
-  h1 { @apply text-3xl md:text-4xl; } 
-  h2 { @apply text-2xl md:text-3xl; } 
-  h3 { @apply text-xl md:text-2xl; } 
+  h1 { @apply text-3xl md:text-4xl; }
+  h2 { @apply text-2xl md:text-3xl; }
+  h3 { @apply text-xl md:text-2xl; }
 
   /* Button base styles for hover opacity */
   .btn-base-hover {
@@ -188,17 +184,17 @@
   .btn-glow::after { /* Solid background mimic - must be behind content */
     content: "";
     position: absolute;
-    inset: 2px; 
-    background: hsl(var(--background)); 
+    inset: 2px;
+    background: hsl(var(--background));
     @apply rounded-md; /* Use Tailwind's rounded-md which matches button's default */
     z-index: -1; /* Behind content, on top of ::before */
   }
 
   /* Ensure button content (text, icons) is on top of pseudo-elements */
-  .btn-glow > :not(span.sr-only):not(svg ~ span):not(svg) { 
+  .btn-glow > :not(span.sr-only):not(svg ~ span):not(svg) {
     @apply relative z-10;
   }
-  .btn-glow > span, .btn-glow > svg, .btn-glow > div { 
+  .btn-glow > span, .btn-glow > svg, .btn-glow > div {
     @apply relative z-10;
   }
 
@@ -208,26 +204,7 @@
     filter: brightness(1.2);
   }
 
-  .bg-ai-tool-gradient {
-    @apply text-primary-foreground rounded-lg shadow-lg relative overflow-hidden;
-    background: linear-gradient(to right, hsl(var(--ai-tool-gradient-start)), hsl(var(--ai-tool-gradient-end)));
-  }
-  .bg-ai-tool-gradient::before {
-    content: "";
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    z-index: 0; /* Behind content but above static background */
-    background: radial-gradient(ellipse at center, hsla(var(--accent), 0.3) 0%, transparent 70%);
-    animation: pulse-ai-tool-background 3s infinite ease-in-out alternate;
-  }
-  .bg-ai-tool-gradient > * {
-    @apply relative z-10; /* Ensure content is above the gradient's ::before pseudo-element */
-  }
-
-  .dark .bg-ai-tool-gradient::before {
-    background: radial-gradient(ellipse at center, hsla(var(--accent), 0.4) 0%, transparent 70%); /* Use dark mode accent */
-    animation: pulse-ai-tool-background-dark 3s infinite ease-in-out alternate;
-  }
+  /* Removed .bg-ai-tool-gradient and its related pseudo-elements */
 }
 
 @keyframes rotate-glow {
@@ -251,21 +228,13 @@
 }
 @keyframes pulse-background-dark {
   0% {
-    opacity: 0.5; 
+    opacity: 0.5;
     background: radial-gradient(ellipse at center, var(--bg-glow-start-color) 0%, var(--bg-glow-accent-color) 20%, var(--bg-glow-end-color) 70%);
   }
   100% {
-    opacity: 0.8; 
+    opacity: 0.8;
      background: radial-gradient(ellipse at center, var(--bg-glow-start-color) 0%, var(--bg-glow-accent-color) 40%, var(--bg-glow-end-color) 70%);
   }
 }
 
-@keyframes pulse-ai-tool-background {
-  0% { opacity: 0.2; transform: scale(1); }
-  100% { opacity: 0.5; transform: scale(1.05); }
-}
-
-@keyframes pulse-ai-tool-background-dark {
-  0% { opacity: 0.3; transform: scale(1); }
-  100% { opacity: 0.6; transform: scale(1.05); }
-}
+/* Removed pulse-ai-tool-background and pulse-ai-tool-background-dark keyframes */

@@ -1,5 +1,5 @@
 import { config } from 'dotenv';
 config();
 
-import '@/ai/flows/project-description-generator.ts';
-import '@/ai/flows/simple-project-generator.ts';
+// AI tool related flows have been removed.
+// If you have other Genkit flows, import them here.

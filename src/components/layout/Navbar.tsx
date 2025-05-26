@@ -3,8 +3,8 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X, Sun, Moon, LogIn, LayoutDashboard, LogOut } from 'lucide-react'; // Removed UserPlus
-import React, { useState, useEffect } from 'react'; 
+import { Menu, X, Sun, Moon, LogIn, LayoutDashboard, LogOut } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -18,7 +18,7 @@ const navItems = [
   { href: '/blog', label: 'Blog' },
   { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },
-  { href: '/ai-project-description', label: 'AI Tool' },
+  // { href: '/ai-project-description', label: 'AI Tool' }, // Removed AI Tool link
 ];
 
 // Mock authentication hook (replace with actual context/logic)
@@ -57,7 +57,7 @@ export function Navbar() {
   useEffect(() => {
     setIsMobileMenuOpen(false); // Close mobile menu on path change
   }, [pathname]);
-  
+
   if (!isMounted || isLoadingAuth) {
     return (
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -119,9 +119,9 @@ export function Navbar() {
   const AuthButtons = ({ isMobile = false, onItemClick }: { isMobile?: boolean, onItemClick?: () => void }) => (
     <div className={cn("flex items-center gap-2", isMobile && "flex-col w-full pt-4 border-t mt-4")}>
       {isLoggedIn ? (
-        <Button 
-          variant={isMobile ? "default" : "outline"} 
-          size="sm" 
+        <Button
+          variant={isMobile ? "default" : "outline"}
+          size="sm"
           onClick={() => { logout(); onItemClick && onItemClick(); }}
           className={cn(isMobile && "w-full")}
         >
@@ -132,7 +132,6 @@ export function Navbar() {
           <Button variant={isMobile ? "outline" : "ghost"} size="sm" asChild className={cn(isMobile && "w-full")}>
             <Link href="/login" onClick={onItemClick}><LogIn className="mr-2 h-4 w-4" />Login</Link>
           </Button>
-          {/* Sign Up button removed */}
         </>
       )}
     </div>
@@ -143,7 +142,7 @@ export function Navbar() {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
         <Logo />
-        
+
         <div className="hidden md:flex items-center gap-x-2">
           <NavLinks />
           <ThemeToggleButton />
@@ -159,7 +158,7 @@ export function Navbar() {
                 <span className="sr-only">Toggle menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-full max-w-xs sm:max-w-sm pt-0 flex flex-col p-0"> 
+            <SheetContent side="right" className="w-full max-w-xs sm:max-w-sm pt-0 flex flex-col p-0">
               <div className="flex items-center justify-between px-6 h-16 border-b">
                  <Logo />
                  <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(false)}>
