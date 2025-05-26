@@ -2,7 +2,7 @@ import type { Config } from "tailwindcss";
 import defaultTheme from 'tailwindcss/defaultTheme';
 
 export default {
-    darkMode: ["class"],
+    darkMode: ["class"], // Ensure 'class' strategy is enabled
     content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -13,8 +13,8 @@ export default {
       fontFamily: {
         sans: ['var(--font-roboto)', ...defaultTheme.fontFamily.sans],
         heading: ['var(--font-poppins)', ...defaultTheme.fontFamily.sans],
-        roboto: ['var(--font-roboto)'], // Added for explicit use
-        poppins: ['var(--font-poppins)'], // Added for explicit use
+        roboto: ['var(--font-roboto)'], 
+        poppins: ['var(--font-poppins)'], 
       },
   		colors: {
   			background: 'hsl(var(--background))',
@@ -95,7 +95,7 @@ export default {
           '100%': { transform: 'rotate(360deg)' },
         },
         'pulse-background': {
-          '0%': { opacity: '0.7' },
+          '0%': { opacity: '0.7' }, // Adjusted from previous values if needed
           '100%': { opacity: '1' },
         },
          'pulse-background-dark': {

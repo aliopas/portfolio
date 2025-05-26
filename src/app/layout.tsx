@@ -4,6 +4,7 @@ import './globals.css';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { Toaster } from "@/components/ui/toaster";
+import { ThemeProvider } from '@/context/ThemeContext';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -28,14 +29,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning> {/* suppressHydrationWarning is important for theme switching */}
       <body className={`${poppins.variable} ${roboto.variable} font-roboto antialiased flex flex-col min-h-screen`}>
-        <Navbar />
-        <main className="flex-grow container py-8 md:py-12">
-          {children}
-        </main>
-        <Footer />
-        <Toaster />
+        <ThemeProvider>
+          <Navbar />
+          <main className="flex-grow container py-8 md:py-12">
+            {children}
+          </main>
+          <Footer />
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );

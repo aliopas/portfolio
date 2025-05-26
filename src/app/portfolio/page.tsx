@@ -65,7 +65,7 @@ export default function PortfolioPage() {
       {/* Filtering (placeholder UI) */}
       <div className="flex flex-col sm:flex-row gap-4 items-center justify-center p-4 bg-card rounded-lg shadow">
         <h3 className="text-lg font-semibold sr-only sm:not-sr-only">Filter Projects</h3>
-        <div className="flex flex-wrap gap-3 justify-center"> {/* Increased gap for better spacing */}
+        <div className="flex flex-wrap gap-3 justify-center"> {/* Adjusted gap to gap-3 */}
           <Button variant="outline" size="sm" className="btn-glow btn-base-hover"><Filter className="mr-2 h-4 w-4" />All</Button>
           <Button variant="outline" size="sm" className="btn-glow btn-base-hover">Web Application</Button>
           <Button variant="outline" size="sm" className="btn-glow btn-base-hover">Mobile App</Button>
@@ -83,7 +83,7 @@ export default function PortfolioPage() {
                 alt={project.title}
                 width={600}
                 height={400} 
-                className="object-cover w-full h-48" // Standardized height to h-48
+                className="object-cover w-full h-48" // Consistent height h-48 (12rem/192px)
                 data-ai-hint={project.imageHint}
               />
               <div className="absolute top-2 right-2 bg-primary/80 text-primary-foreground px-2 py-1 text-xs rounded">

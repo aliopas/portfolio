@@ -4,34 +4,34 @@
 
 @layer base {
   :root {
-    /* Style Guidelines - Light Mode */
-    --background: 220 14% 96%; /* Light grey (#F0F2F5) */
-    --foreground: 222 47% 11%; /* Dark text for readability */
+    /* Light Mode - Updated Color Scheme */
+    --background: 210 17% 98%; /* #F9FAFB */
+    --foreground: 215 28% 21%; /* #1F2937 */
 
-    --card: 0 0% 100%; /* White for cards */
-    --card-foreground: 222 47% 11%;
+    --card: 0 0% 100%;
+    --card-foreground: 215 28% 21%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+    --popover-foreground: 215 28% 21%;
 
-    --primary: 225 73% 57%; /* Deep blue (#3F51B5) */
+    --primary: 217 91% 60%; /* #3B82F6 */
     --primary-foreground: 0 0% 98%; /* White text on primary */
 
-    --secondary: 220 13% 91%; /* Lighter grey for secondary elements */
-    --secondary-foreground: 222 47% 11%;
+    --secondary: 217 94% 68%; /* #60A5FA - used as a lighter primary variant or secondary action */
+    --secondary-foreground: 215 28% 21%; /* Dark text on light secondary */
 
-    --muted: 220 9% 85%; /* Muted grey */
-    --muted-foreground: 222 20% 40%; /* Muted text */
+    --muted: 220 9% 85%;
+    --muted-foreground: 222 20% 40%;
 
-    --accent: 260 57% 60%; /* Vibrant purple (#7E57C2) */
+    --accent: 217 91% 60%; /* #3B82F6 (Same as primary for light mode) */
     --accent-foreground: 0 0% 98%; /* White text on accent */
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 220 13% 88%; 
-    --input: 220 13% 88%;  
-    --ring: 225 73% 57%; /* Primary color for focus rings */
+    --border: 220 13% 88%;
+    --input: 220 13% 88%;
+    --ring: 217 91% 60%; /* Primary color for focus rings */
 
     --radius: 0.5rem;
 
@@ -43,53 +43,53 @@
     
     --sidebar-background: 220 13% 92%;
     --sidebar-foreground: 240 10% 3.9%;
-    --sidebar-primary: 231 48% 48%;
+    --sidebar-primary: 217 91% 55%; /* Adjusted primary for sidebar */
     --sidebar-primary-foreground: 0 0% 98%;
     --sidebar-accent: 220 13% 85%;
     --sidebar-accent-foreground: 240 10% 3.9%;
     --sidebar-border: 220 13% 80%;
-    --sidebar-ring: 231 48% 48%;
+    --sidebar-ring: 217 91% 55%;
 
     /* Glow Animation Colors - Light Mode */
-    --btn-glow-color: hsl(260, 57%, 70%); /* Lighter Purple for glow */
-    --bg-glow-start-color: hsl(220, 14%, 90%); /* Lighter shade of #F0F2F5 */
-    --bg-glow-end-color: hsl(220, 14%, 96%);   /* #F0F2F5 */
-    --bg-glow-accent-color: hsl(260, 57%, 70%); /* Lighter Purple accent for glow */
+    --btn-glow-color: hsl(217, 94%, 75%); /* Lighter version of #3B82F6 for glow */
+    --bg-glow-start-color: hsl(217, 80%, 93%); /* #DBEAFE */
+    --bg-glow-end-color: hsl(210, 17%, 98%);   /* #F9FAFB */
+    --bg-glow-accent-color: hsl(217, 91%, 70%); /* Accent for glow based on primary */
 
     /* AI Tool Specific Gradient Colors - Light Mode */
-    --ai-tool-gradient-start: 225 73% 47%; /* Darker shade of #3F51B5 like #1E40AF */
-    --ai-tool-gradient-end: 225 73% 57%; /* #3F51B5 */
+    --ai-tool-gradient-start: 221 60% 40%; /* #1E40AF */
+    --ai-tool-gradient-end: 217 91% 60%; /* #3B82F6 */
   }
 
   .dark {
-    /* Style Guidelines - Dark Mode */
-    --background: 222 47% 11%; /* Dark gray (#1F2937) */
-    --foreground: 220 14% 96%; /* Light text (#F0F2F5) */
+    /* Dark Mode - Updated Color Scheme */
+    --background: 215 28% 21%; /* #1F2937 */
+    --foreground: 210 17% 98%; /* #F9FAFB */
 
-    --card: 222 47% 15%; /* Slightly lighter dark for cards */
-    --card-foreground: 220 14% 96%;
+    --card: 215 28% 17%; /* Darker than background for cards */
+    --card-foreground: 210 17% 98%;
 
-    --popover: 222 47% 8%;
-    --popover-foreground: 220 14% 96%;
+    --popover: 215 28% 15%;
+    --popover-foreground: 210 17% 98%;
 
-    --primary: 225 73% 57%; /* Deep blue (#3F51B5) - consistent */
+    --primary: 217 91% 60%; /* #3B82F6 - consistent for primary actions */
     --primary-foreground: 0 0% 98%;
 
-    --secondary: 222 47% 20%; /* Darker grey for secondary elements */
-    --secondary-foreground: 220 14% 96%;
+    --secondary: 217 94% 68%; /* #60A5FA - consistent for secondary actions */
+    --secondary-foreground: 215 28% 17%; /* Dark text on light secondary */
     
-    --muted: 222 47% 25%; /* Muted dark gray */
-    --muted-foreground: 220 10% 60%; /* Muted light text */
+    --muted: 222 47% 25%;
+    --muted-foreground: 220 10% 60%;
 
-    --accent: 260 57% 70%; /* Lighter Vibrant purple for dark mode */
-    --accent-foreground: 222 47% 11%; 
+    --accent: 217 94% 68%; /* #60A5FA (Dark mode accent) */
+    --accent-foreground: 215 28% 17%; /* Dark text on light accent */
 
     --destructive: 0 72.2% 50.6%;
     --destructive-foreground: 0 0% 98%;
 
     --border: 222 47% 25%; 
     --input: 222 47% 25%; 
-    --ring: 260 57% 70%; /* Accent color for focus rings in dark */
+    --ring: 217 94% 68%; /* Accent color for focus rings in dark */
     
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
@@ -99,22 +99,22 @@
 
     --sidebar-background: 240 10% 5.9%;
     --sidebar-foreground: 220 13% 95%;
-    --sidebar-primary: 231 48% 48%;
+    --sidebar-primary: 217 91% 55%;
     --sidebar-primary-foreground: 0 0% 98%;
     --sidebar-accent: 240 5% 14.9%;
     --sidebar-accent-foreground: 220 13% 95%;
     --sidebar-border: 240 5% 10%;
-    --sidebar-ring: 231 48% 48%;
+    --sidebar-ring: 217 91% 55%;
 
     /* Glow Animation Colors - Dark Mode */
-    --btn-glow-color: hsl(260, 67%, 80%); /* Even Lighter Purple for glow */
-    --bg-glow-start-color: hsl(222, 47%, 10%); /* Darker shade of #1F2937 */
-    --bg-glow-end-color: hsl(222, 47%, 11%);   /* #1F2937 */
-    --bg-glow-accent-color: hsl(260, 57% 60%); /* Vibrant purple for dark mode glow */
+    --btn-glow-color: hsl(217, 94%, 80%); /* Lighter blue #93C5FD */
+    --bg-glow-start-color: hsl(222, 47%, 15%); /* #1E3A8A */
+    --bg-glow-end-color: hsl(215, 28%, 21%);   /* #1F2937 */
+    --bg-glow-accent-color: hsl(217, 94%, 68%); /* Glowing blue accent #60A5FA */
 
     /* AI Tool Specific Gradient Colors - Dark Mode */
-    --ai-tool-gradient-start: 222 47% 13%; /* #1E3A8A (example from user) */
-    --ai-tool-gradient-end: 260 57% 60%; /* #7E57C2 (accent for dark mode) */
+    --ai-tool-gradient-start: 222 47% 15%; /* #1E3A8A */
+    --ai-tool-gradient-end: 217 94% 68%; /* #60A5FA */
   }
 }
 
@@ -212,7 +212,7 @@
   }
 
   .dark .bg-ai-tool-gradient::before {
-    background: radial-gradient(ellipse at center, hsla(var(--accent), 0.4) 0%, transparent 70%);
+    background: radial-gradient(ellipse at center, hsla(var(--accent), 0.4) 0%, transparent 70%); /* Use dark mode accent */
     animation: pulse-ai-tool-background-dark 3s infinite ease-in-out alternate;
   }
 }
@@ -228,19 +228,19 @@
 
 @keyframes pulse-background {
   0% {
-    opacity: 0.6; /* Adjusted for light mode */
+    opacity: 0.6; 
   }
   100% {
-    opacity: 0.9; /* Adjusted for light mode */
+    opacity: 0.9; 
   }
 }
 @keyframes pulse-background-dark {
   0% {
-    opacity: 0.5; /* Adjusted for dark mode */
+    opacity: 0.5; 
     background: radial-gradient(ellipse at center, var(--bg-glow-start-color) 0%, var(--bg-glow-accent-color) 20%, var(--bg-glow-end-color) 70%);
   }
   100% {
-    opacity: 0.8; /* Adjusted for dark mode */
+    opacity: 0.8; 
      background: radial-gradient(ellipse at center, var(--bg-glow-start-color) 0%, var(--bg-glow-accent-color) 40%, var(--bg-glow-end-color) 70%);
   }
 }
