@@ -2,7 +2,7 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"; // Added CardDescription
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { CloudSun, Zap, Code, Brain, Users } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -10,7 +10,7 @@ import Image from "next/image";
 
 // Mock data - replace with Firebase data later
 const developerInfo = {
-  name: "Alex Developer", // This could be 'علي علاء' if it's personal branding
+  name: "AliAlaa", // This could be 'AliAlaa' if it's personal branding
   title: "Full-Stack Web Developer",
   bio: "Passionate about creating intuitive and performant web experiences. With a strong foundation in modern JavaScript frameworks and backend technologies, I enjoy tackling complex challenges and continuously learning new skills. My goal is to build applications that are not only functional but also delightful to use.",
   avatarUrl: "https://placehold.co/200x200.png",

@@ -44,7 +44,7 @@ export default function Home() {
       <section className="text-center py-16 md:py-24 bg-card rounded-lg shadow-lg">
         <div className="container">
           <h1 className="text-primary">
-            Welcome to علي علاء's Portfolio
+            Welcome to AliAlaa's Portfolio
           </h1>
           <p className="mt-4 text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
             Showcase your skills, projects, and journey as a developer. Connect, create, and inspire with a portfolio that truly represents you.
