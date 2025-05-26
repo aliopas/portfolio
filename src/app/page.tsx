@@ -76,14 +76,14 @@ export default function Home() {
                   src={project.imageUrl}
                   alt={project.title}
                   width={600}
-                  height={400} // Consistent with placeholder aspect ratio
-                  className="object-cover w-full h-48" // h-48 maintains uniform card height
+                  height={400}
+                  className="object-cover w-full h-48" // Standardized height
                   data-ai-hint={project.imageHint}
                 />
               </CardHeader>
               <CardContent className="flex-grow p-6 space-y-3">
                 <CardTitle className="text-xl">{project.title}</CardTitle>
-                <CardDescription className="text-muted-foreground text-sm leading-relaxed">
+                <CardDescription className="text-muted-foreground text-sm leading-relaxed line-clamp-3">
                   {project.description}
                 </CardDescription>
                 <div className="flex flex-wrap gap-2 pt-2">
@@ -108,16 +108,22 @@ export default function Home() {
       </section>
 
       {/* AI Tool Teaser Section */}
-      <section className="py-12 bg-gradient-to-r from-primary to-accent text-primary-foreground rounded-lg shadow-lg">
+      <section className="py-12 bg-ai-tool-gradient"> {/* Updated class for dynamic gradient and glow */}
         <div className="container text-center">
-          <Lightbulb className="h-12 w-12 mx-auto mb-4 text-background" />
-          <h2 className="text-3xl font-bold tracking-tight mb-4">
+          <Lightbulb className="h-12 w-12 mx-auto mb-4 text-background" /> {/* text-background ensures visibility on gradient */}
+          <h2 className="text-3xl font-bold tracking-tight mb-4"> {/* text-primary-foreground for visibility */}
             Craft Perfect Project Descriptions with AI
           </h2>
-          <p className="text-lg text-background/80 max-w-2xl mx-auto mb-8">
+          <p className="text-lg text-background/90 max-w-2xl mx-auto mb-8"> {/* text-primary-foreground/80 for visibility */}
             Struggling to describe your amazing projects? Let our AI tool help you generate compelling descriptions based on your project's features and technologies.
           </p>
-          <Button variant="secondary" size="lg" asChild className="bg-background text-primary hover:bg-background/90 btn-glow btn-base-hover">
+          {/* Button styling to ensure text is visible on the new gradient. ShadCN secondary might need adjustment if text is primary */}
+          <Button 
+            variant="secondary" 
+            size="lg" 
+            asChild 
+            className="bg-background text-primary hover:bg-background/90 btn-glow btn-base-hover"
+          >
             <Link href="/ai-project-description">Try the AI Tool <Code className="ml-2 h-5 w-5" /></Link>
           </Button>
         </div>
