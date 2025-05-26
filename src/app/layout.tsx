@@ -31,8 +31,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      {/* suppressHydrationWarning is important for theme switching, moved comment here */}
       <body className={`${poppins.variable} ${roboto.variable} font-roboto antialiased flex flex-col min-h-screen`}>
+        {/* suppressHydrationWarning for <html> is important for theme switching with ThemeProvider */}
         <ThemeProvider>
           <Navbar />
           <main className="flex-grow container py-8 md:py-12">
@@ -45,3 +45,4 @@ export default function RootLayout({
     </html>
   );
 }
+
