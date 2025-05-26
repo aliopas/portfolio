@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useFormState, useFormStatus } from 'react-dom';
@@ -120,7 +121,7 @@ export default function AiProjectDescriptionPage() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <pre className="whitespace-pre-wrap bg-muted/50 p-4 rounded-md text-sm font-mono leading-relaxed">
+              <pre className="whitespace-pre-wrap bg-muted/50 p-4 rounded-md text-sm font-mono leading-relaxed text-foreground">
                 {state.description}
               </pre>
             </CardContent>
