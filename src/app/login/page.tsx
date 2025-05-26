@@ -7,8 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LogIn } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation"; // For redirecting
-import React, { useState } from "react"; // React import for useState
+import { useRouter } from "next/navigation"; 
+import React, { useState } from "react"; 
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -22,13 +22,12 @@ export default function LoginPage() {
     setIsLoading(true);
     setError('');
 
-    // Mock login logic - In a real app, this would be an API call
     await new Promise(resolve => setTimeout(resolve, 1000));
 
-    // Replace with your actual authentication logic
+    // Admin credentials
     if (email === "admin@example.com" && password === "password") {
-      localStorage.setItem('isMockLoggedIn', 'true'); // Set mock login status
-      router.push('/dashboard'); // Redirect to dashboard
+      localStorage.setItem('isMockLoggedIn', 'true'); 
+      router.push('/dashboard'); 
     } else {
       setError('Invalid email or password. (Hint: admin@example.com / password)');
       localStorage.removeItem('isMockLoggedIn');
@@ -40,8 +39,8 @@ export default function LoginPage() {
     <div className="flex items-center justify-center py-12">
       <Card className="w-full max-w-md shadow-xl">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold text-primary">Login to Your Account</CardTitle>
-          <CardDescription>Access your dashboard to manage your portfolio.</CardDescription>
+          <CardTitle className="text-2xl font-bold text-primary">Admin Login</CardTitle>
+          <CardDescription>Access the dashboard to manage your portfolio.</CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-6">
@@ -68,8 +67,7 @@ export default function LoginPage() {
               />
             </div>
             {error && <p className="text-sm text-destructive">{error}</p>}
-            <div className="flex items-center justify-between text-sm">
-              {/* Remember me checkbox can be added here */}
+            <div className="flex items-center justify-end text-sm"> {/* Adjusted to remove "Remember me" and align "Forgot password" */}
               <Link href="#" className="font-medium text-primary hover:underline">
                 Forgot password?
               </Link>
@@ -87,12 +85,7 @@ export default function LoginPage() {
               )}
               Login
             </Button>
-            <p className="text-center text-sm text-muted-foreground">
-              Don't have an account?{' '}
-              <Link href="/signup" className="font-medium text-primary hover:underline">
-                Sign Up
-              </Link>
-            </p>
+            {/* Sign up link removed */}
           </CardFooter>
         </form>
       </Card>
