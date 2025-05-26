@@ -30,8 +30,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <head /> {/* Explicit empty head; Next.js metadata API will populate it */}
+    <html lang="en" suppressHydrationWarning><head /> {/* Explicit empty head; Next.js metadata API will populate it */}
       <body className={`${poppins.variable} ${roboto.variable} font-roboto antialiased flex flex-col min-h-screen`}>
         <ThemeProvider>
           <Navbar />
