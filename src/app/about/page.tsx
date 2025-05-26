@@ -3,7 +3,7 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"; // CardDescription was missing
 import { Progress } from "@/components/ui/progress";
 import { CloudSun, Zap, Code, Brain, Users } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -43,7 +43,7 @@ export default function AboutPage() {
     const apiKey = process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY;
     const city = developerInfo.location.split(',')[0]; 
 
-    if (!apiKey || apiKey === "YOUR_OPENWEATHER_API_KEY_NEEDS_TO_BE_SET_HERE" || apiKey === "YOUR_OPENWEATHER_API_KEY") {
+    if (!apiKey || apiKey.includes("YOUR_OPENWEATHER_API_KEY")) { // Simplified check
       setWeatherError("OpenWeather API key not configured. Please set it in the .env file.");
       console.warn("OpenWeather API key is not configured. Please set NEXT_PUBLIC_OPENWEATHER_API_KEY in your .env file.");
       return;
@@ -69,7 +69,7 @@ export default function AboutPage() {
       } catch (error) {
         console.error("Failed to fetch weather:", error);
         if (error instanceof Error) {
-           setWeatherError(error.message);
+           setWeatherError(`Failed to fetch weather: ${error.message}`);
         } else {
            setWeatherError("An unknown error occurred while fetching weather data.");
         }
@@ -139,4 +139,3 @@ export default function AboutPage() {
     </div>
   );
 }
-

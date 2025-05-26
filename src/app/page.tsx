@@ -1,7 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight } from "lucide-react"; // Removed Lightbulb, Code icons
+import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { projectsData } from "@/data/mockData";
@@ -14,7 +14,7 @@ export default function Home() {
     <div className="space-y-16">
       {/* Hero Section */}
       <section className="text-center py-16 md:py-24 bg-card rounded-lg shadow-lg">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8"> {/* Added container and padding for consistency */}
+        <div className="px-4 sm:px-0"> {/* Removed nested container, padding controlled by main layout */}
           <h1 className="text-primary px-4 sm:px-0">
             Welcome to AliAlaa's Portfolio
           </h1>
@@ -48,8 +48,8 @@ export default function Home() {
                   src={project.imageUrl}
                   alt={project.title}
                   width={600}
-                  height={160} // Consistent height h-40 (10rem/160px)
-                  className="object-cover w-full h-40"
+                  height={160} 
+                  className="object-cover w-full h-40" // Consistent height h-40 (10rem/160px)
                   data-ai-hint={project.imageHint}
                 />
               </CardHeader>
@@ -59,11 +59,8 @@ export default function Home() {
                   {project.description}
                 </CardDescription>
                 <div className="flex flex-wrap gap-2 pt-2">
-                  {project.tags && project.tags.map((tag: string) => ( // Added project.tags check and type
+                  {project.tags.map((tag: string) => ( 
                     <span key={tag} className="px-2 py-1 text-xs bg-secondary text-secondary-foreground rounded-full">{tag}</span>
-                  ))}
-                  {!project.tags && project.technologies.map(tech => ( // Fallback to technologies if tags don't exist
-                     <span key={tech} className="px-2 py-1 text-xs bg-secondary text-secondary-foreground rounded-full">{tech}</span>
                   ))}
                 </div>
               </CardContent>
@@ -79,7 +76,7 @@ export default function Home() {
                         <Link href={project.liveLink} target="_blank" rel="noopener noreferrer">Live Demo <ArrowRight className="ml-1 h-4 w-4" /></Link>
                     </Button>
                     ) : (
-                        project.githubLink ? null : <Button size="sm" disabled className="btn-base-hover">Live Demo</Button> // Show disabled only if no githubLink either
+                        project.githubLink ? null : <Button size="sm" disabled className="btn-base-hover">Live Demo</Button>
                     )}
                 </div>
               </CardFooter>
@@ -87,8 +84,6 @@ export default function Home() {
           ))}
         </div>
       </section>
-
-      {/* AI Tool Teaser Section Removed */}
     </div>
   );
 }

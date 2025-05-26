@@ -7,6 +7,7 @@ export interface Project {
   description: string;
   category: string;
   technologies: string[];
+  tags: string[]; // Ensure tags is always an array
   imageUrl: string;
   imageHint: string;
   githubLink?: string | null;
@@ -30,21 +31,23 @@ export const projectsData: Project[] = [
     description: "A full-featured online store with product listings, cart functionality, and user accounts. Built with modern frontend and backend technologies for a seamless shopping experience.",
     category: "Web Application",
     technologies: ["React", "Node.js", "Firebase", "Stripe"],
+    tags: ["E-commerce", "React", "Full-stack"],
     imageUrl: "https://placehold.co/600x400.png",
     imageHint: "online store",
-    githubLink: "#",
-    liveLink: "#",
+    githubLink: null, // Use null for consistency
+    liveLink: null,  // Use null for consistency
   },
   {
     id: "2",
     title: "Task Management App",
     description: "A collaborative tool to organize tasks, set deadlines, and track progress effectively. Features include boards, lists, and cards, similar to Trello.",
     category: "Web Application",
-    technologies: ["Next.js", "Tailwind CSS", "Supabase", " Zustand"],
+    technologies: ["Next.js", "Tailwind CSS", "Supabase", "Zustand"],
+    tags: ["Productivity", "Next.js", "Collaboration"],
     imageUrl: "https://placehold.co/600x400.png",
     imageHint: "task app",
-    githubLink: "#",
-    liveLink: "#",
+    githubLink: null,
+    liveLink: null,
   },
   {
     id: "3",
@@ -52,10 +55,11 @@ export const projectsData: Project[] = [
     description: "A content-focused platform for sharing articles and insights with a clean reading experience. Supports Markdown and code highlighting.",
     category: "Web Application",
     technologies: ["Gatsby", "Markdown", "Netlify", "GraphQL"],
+    tags: ["Writing", "Gatsby", "CMS"],
     imageUrl: "https://placehold.co/600x400.png",
     imageHint: "blog interface",
-    githubLink: "#",
-    liveLink: "#",
+    githubLink: null,
+    liveLink: null,
   },
   {
     id: "4",
@@ -63,10 +67,11 @@ export const projectsData: Project[] = [
     description: "A cross-platform mobile application providing real-time weather forecasts, alerts, and historical data. User-friendly interface and customizable locations.",
     category: "Mobile App",
     technologies: ["React Native", "Expo", "OpenWeatherMap API"],
+    tags: ["Mobile", "React Native", "Utility"],
     imageUrl: "https://placehold.co/600x400.png",
     imageHint: "mobile weather",
-    githubLink: "#",
-    liveLink: "#",
+    githubLink: null,
+    liveLink: null,
   },
   {
     id: "5",
@@ -74,10 +79,11 @@ export const projectsData: Project[] = [
     description: "A powerful data visualization dashboard providing real-time insights and analytics. Customizable widgets and reporting features for business intelligence.",
     category: "Data Science",
     technologies: ["Python", "Flask", "D3.js", "PostgreSQL"],
+    tags: ["Analytics", "Python", "Visualization"],
     imageUrl: "https://placehold.co/600x400.png",
     imageHint: "data dashboard",
-    githubLink: "#",
-    liveLink: "#",
+    githubLink: null,
+    liveLink: null,
   },
   {
     id: "6",
@@ -85,9 +91,10 @@ export const projectsData: Project[] = [
     description: "A utility library for developers, simplifying common tasks and improving code efficiency. Actively maintained with community contributions and comprehensive documentation.",
     category: "Tooling",
     technologies: ["JavaScript", "Jest", "Webpack", "Babel"],
+    tags: ["Development", "JavaScript", "Utility"],
     imageUrl: "https://placehold.co/600x400.png",
     imageHint: "code library",
-    githubLink: "#",
+    githubLink: null,
     liveLink: null,
   },
 ];
