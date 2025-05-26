@@ -1,23 +1,49 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { LayoutDashboard, FileText, MessageSquare, PlusCircle, Settings } from "lucide-react";
-import Link from "next/link";
 
-// This page should be protected by authentication in a real app.
+'use client';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { LayoutDashboard, FileText, MessageSquare, PlusCircle, Settings, Briefcase, Eye, UserCircle } from "lucide-react";
+import Link from "next/link";
+import { projectsData, messagesData } from "@/data/mockData"; // Using centralized mock data
+import { useTheme } from '@/context/ThemeContext'; // For theme-aware styling if needed
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+
+
+// Mock data for charts - replace with actual analytics later
+const viewsData = [
+  { name: 'Jan', projects: 400, blog: 240 },
+  { name: 'Feb', projects: 300, blog: 139 },
+  { name: 'Mar', projects: 200, blog: 980 },
+  { name: 'Apr', projects: 278, blog: 390 },
+  { name: 'May', projects: 189, blog: 480 },
+  { name: 'Jun', projects: 239, blog: 380 },
+];
+
+const engagementData = [
+  { name: 'Comments', value: messagesData.filter(m => m.subject && m.subject.toLowerCase().includes('comment')).length + 15 }, // Adding some mock comments
+  { name: 'Likes', value: 350 }, // Placeholder
+  { name: 'Shares', value: 120 }, // Placeholder
+];
+
 
 export default function DashboardPage() {
+  const { theme } = useTheme();
+  const unreadMessagesCount = messagesData.filter(msg => !msg.read).length;
+
   return (
     <div className="space-y-8">
-      <header className="flex flex-col sm:flex-row items-center justify-between gap-4">
+      <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-primary">Dashboard</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-primary">Dashboard Overview</h1>
           <p className="mt-1 text-muted-foreground">
-            Manage your portfolio content, blog posts, and view messages.
+            Welcome back, AliAlaa! Manage your portfolio and view insights.
           </p>
         </div>
-        <Button variant="outline">
-          <Settings className="mr-2 h-4 w-4" />
-          Account Settings
+        <Button variant="outline" asChild>
+            <Link href="/dashboard/settings">
+                <Settings className="mr-2 h-4 w-4" />
+                Account Settings
+            </Link>
         </Button>
       </header>
 
@@ -25,35 +51,17 @@ export default function DashboardPage() {
         <Card className="shadow-md hover:shadow-lg transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Manage Projects</CardTitle>
-            <LayoutDashboard className="h-5 w-5 text-muted-foreground" />
+            <Briefcase className="h-5 w-5 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">12 Projects</div>
+            <div className="text-2xl font-bold">{projectsData.length} Projects</div>
             <p className="text-xs text-muted-foreground">
-              View, add, edit, or delete your portfolio projects.
+              Add, edit, or delete your portfolio projects.
             </p>
           </CardContent>
           <CardFooter>
-            <Button className="w-full" asChild>
+            <Button className="w-full btn-glow" asChild>
               <Link href="/dashboard/projects"><PlusCircle className="mr-2 h-4 w-4" /> Manage Projects</Link>
-            </Button>
-          </CardFooter>
-        </Card>
-
-        <Card className="shadow-md hover:shadow-lg transition-shadow">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Manage Blog Posts</CardTitle>
-            <FileText className="h-5 w-5 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">8 Blog Posts</div>
-            <p className="text-xs text-muted-foreground">
-              Create new articles, edit existing ones, and manage comments.
-            </p>
-          </CardContent>
-          <CardFooter>
-            <Button className="w-full" asChild>
-              <Link href="/dashboard/blog"><PlusCircle className="mr-2 h-4 w-4" /> Manage Blog Posts</Link>
             </Button>
           </CardFooter>
         </Card>
@@ -64,45 +72,91 @@ export default function DashboardPage() {
             <MessageSquare className="h-5 w-5 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">5 New Messages</div>
+            <div className="text-2xl font-bold">{unreadMessagesCount} New Messages</div>
             <p className="text-xs text-muted-foreground">
-              Read and respond to messages from your contact form.
+              {messagesData.length} total messages from your contact form.
             </p>
           </CardContent>
           <CardFooter>
-            <Button className="w-full" asChild>
-              <Link href="/dashboard/messages">View Messages</Link>
+            <Button className="w-full btn-glow" asChild>
+              <Link href="/dashboard/messages"><Eye className="mr-2 h-4 w-4" /> View Messages</Link>
+            </Button>
+          </CardFooter>
+        </Card>
+        
+        <Card className="shadow-md hover:shadow-lg transition-shadow">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Manage Blog (Coming Soon)</CardTitle>
+            <FileText className="h-5 w-5 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">N/A Posts</div>
+            <p className="text-xs text-muted-foreground">
+              This feature is under development.
+            </p>
+          </CardContent>
+          <CardFooter>
+            <Button className="w-full" disabled>
+              <PlusCircle className="mr-2 h-4 w-4" /> Manage Blog Posts
             </Button>
           </CardFooter>
         </Card>
       </div>
 
-      {/* Quick Stats Section - Placeholder */}
-      <Card className="shadow-lg">
-        <CardHeader>
-          <CardTitle>Portfolio At a Glance</CardTitle>
-          <CardDescription>Summary of your content and engagement.</CardDescription>
-        </CardHeader>
-        <CardContent className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <div className="p-4 bg-muted rounded-lg">
-                <h4 className="text-sm font-medium text-muted-foreground">Total Project Views</h4>
-                <p className="text-2xl font-bold">1,234</p>
-            </div>
-            <div className="p-4 bg-muted rounded-lg">
-                <h4 className="text-sm font-medium text-muted-foreground">Total Blog Reads</h4>
-                <p className="text-2xl font-bold">5,678</p>
-            </div>
-            <div className="p-4 bg-muted rounded-lg">
-                <h4 className="text-sm font-medium text-muted-foreground">Comments Received</h4>
-                <p className="text-2xl font-bold">92</p>
-            </div>
-            <div className="p-4 bg-muted rounded-lg">
-                <h4 className="text-sm font-medium text-muted-foreground">Contact Form Submissions</h4>
-                <p className="text-2xl font-bold">27</p>
-            </div>
-        </CardContent>
-      </Card>
+      {/* Quick Stats & Charts Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card className="shadow-lg">
+          <CardHeader>
+            <CardTitle>Content Views</CardTitle>
+            <CardDescription>Monthly views for projects and blog posts.</CardDescription>
+          </CardHeader>
+          <CardContent className="h-[300px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={viewsData} margin={{ top: 5, right: 20, left: -20, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke={theme === 'dark' ? "hsl(var(--border)/0.5)" : "hsl(var(--border))"} />
+                <XAxis dataKey="name" stroke={theme === 'dark' ? "hsl(var(--muted-foreground))" : "hsl(var(--foreground))"} fontSize={12} />
+                <YAxis stroke={theme === 'dark' ? "hsl(var(--muted-foreground))" : "hsl(var(--foreground))"} fontSize={12}/>
+                <Tooltip
+                  contentStyle={{ 
+                    backgroundColor: `hsl(var(--card))`, 
+                    borderColor: `hsl(var(--border))`,
+                    color: `hsl(var(--card-foreground))`
+                  }}
+                  cursor={{ fill: `hsl(var(--accent)/0.2)` }}
+                />
+                <Legend wrapperStyle={{ fontSize: '12px' }} />
+                <Bar dataKey="projects" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} name="Project Views" />
+                <Bar dataKey="blog" fill="hsl(var(--secondary))" radius={[4, 4, 0, 0]} name="Blog Reads" />
+              </BarChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
 
+        <Card className="shadow-lg">
+          <CardHeader>
+            <CardTitle>Engagement</CardTitle>
+            <CardDescription>Overview of user interactions.</CardDescription>
+          </CardHeader>
+          <CardContent className="h-[300px]">
+             <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={engagementData} layout="vertical" margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke={theme === 'dark' ? "hsl(var(--border)/0.5)" : "hsl(var(--border))"} />
+                <XAxis type="number" stroke={theme === 'dark' ? "hsl(var(--muted-foreground))" : "hsl(var(--foreground))"} fontSize={12} />
+                <YAxis dataKey="name" type="category" stroke={theme === 'dark' ? "hsl(var(--muted-foreground))" : "hsl(var(--foreground))"} fontSize={12} width={80} />
+                <Tooltip 
+                    contentStyle={{ 
+                        backgroundColor: `hsl(var(--card))`, 
+                        borderColor: `hsl(var(--border))`,
+                        color: `hsl(var(--card-foreground))`
+                    }}
+                    cursor={{ fill: `hsl(var(--accent)/0.2)` }}
+                />
+                <Bar dataKey="value" fill="hsl(var(--primary))" radius={[0, 4, 4, 0]} barSize={20} name="Count" />
+              </BarChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }

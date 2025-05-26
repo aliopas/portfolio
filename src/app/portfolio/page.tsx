@@ -8,57 +8,7 @@ import { ArrowRight, Filter } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-
-// Mock data for projects - replace with Firebase data later
-const projectsData = [
-  {
-    id: "1",
-    title: "Project Alpha",
-    description: "An innovative web application leveraging modern technologies to solve real-world problems. Focused on user experience and scalability.",
-    category: "Web Application",
-    technologies: ["Next.js", "TypeScript", "Tailwind CSS", "Firebase"],
-    imageUrl: "https://placehold.co/600x400.png",
-    imageHint: "web application",
-    githubLink: "#",
-    liveLink: "#",
-  },
-  {
-    id: "2",
-    title: "MobileFirst App",
-    description: "A cross-platform mobile application designed for seamless user interaction on the go. Features offline capabilities and push notifications.",
-    category: "Mobile App",
-    technologies: ["React Native", "Firebase", "Redux"],
-    imageUrl: "https://placehold.co/600x400.png",
-    imageHint: "mobile app",
-    githubLink: "#",
-    liveLink: "#",
-  },
-  {
-    id: "3",
-    title: "Data Dashboard Pro",
-    description: "A powerful data visualization dashboard providing real-time insights and analytics. Customizable widgets and reporting features.",
-    category: "Data Science",
-    technologies: ["Python", "Flask", "D3.js", "PostgreSQL"],
-    imageUrl: "https://placehold.co/600x400.png",
-    imageHint: "data dashboard",
-    githubLink: "#",
-    liveLink: "#",
-  },
-  {
-    id: "4",
-    title: "Open Source Library",
-    description: "A utility library for developers, simplifying common tasks and improving code efficiency. Actively maintained with community contributions.",
-    category: "Tooling",
-    technologies: ["JavaScript", "Jest", "Webpack"],
-    imageUrl: "https://placehold.co/600x400.png",
-    imageHint: "code library",
-    githubLink: "#",
-    liveLink: null, // No live link for this one
-  },
-];
-
-const filterCategories = ["All", ...new Set(projectsData.map(p => p.category))];
-
+import { projectsData, filterCategories as allCategories } from "@/data/mockData";
 
 export default function PortfolioPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
@@ -82,7 +32,7 @@ export default function PortfolioPage() {
           <Filter className="mr-2 h-5 w-5" /> Filter Projects
         </h3>
         <div className="flex flex-wrap gap-3 justify-center">
-          {filterCategories.map(category => (
+          {allCategories.map(category => (
             <Button
               key={category}
               variant={selectedCategory === category ? "default" : "outline"}
@@ -106,7 +56,7 @@ export default function PortfolioPage() {
                   alt={project.title}
                   width={600}
                   height={160} 
-                  className="object-cover w-full h-40"
+                  className="object-cover w-full h-40" // Consistent height h-40 (10rem/160px)
                   data-ai-hint={project.imageHint}
                 />
                 <div className="absolute top-2 right-2 bg-primary/80 text-primary-foreground px-2 py-1 text-xs rounded">
@@ -129,15 +79,17 @@ export default function PortfolioPage() {
               </CardContent>
               <CardFooter className="p-6 bg-muted/50 border-t">
                 <div className="flex justify-between w-full gap-2">
+                  {project.githubLink && (
                   <Button variant="outline" size="sm" asChild className="btn-glow btn-base-hover">
                     <Link href={project.githubLink} target="_blank" rel="noopener noreferrer">GitHub</Link>
                   </Button>
+                  )}
                   {project.liveLink ? (
                     <Button size="sm" asChild className="btn-glow btn-base-hover">
                       <Link href={project.liveLink} target="_blank" rel="noopener noreferrer">Live Demo <ArrowRight className="ml-1 h-4 w-4" /></Link>
                     </Button>
                   ) : (
-                    <Button size="sm" disabled className="btn-base-hover">Live Demo</Button>
+                     project.githubLink ? null : <Button size="sm" disabled className="btn-base-hover">Live Demo</Button> 
                   )}
                 </div>
               </CardFooter>
