@@ -6,7 +6,7 @@ export function Footer() {
     <footer className="border-t bg-background">
       <div className="container py-8 flex flex-col md:flex-row items-center justify-between gap-4">
         <p className="text-sm text-muted-foreground">
-          &copy; {new Date().getFullYear()} DevFolio Connect. All rights reserved.
+          &copy; {new Date().getFullYear()} علي علاء. All rights reserved.
         </p>
         <div className="flex items-center gap-4">
           <Link href="#" aria-label="GitHub" className="text-muted-foreground hover:text-primary transition-colors">

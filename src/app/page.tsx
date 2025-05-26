@@ -44,7 +44,7 @@ export default function Home() {
       <section className="text-center py-16 md:py-24 bg-card rounded-lg shadow-lg">
         <div className="container">
           <h1 className="text-primary">
-            Welcome to DevFolio Connect
+            Welcome to علي علاء's Portfolio
           </h1>
           <p className="mt-4 text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
             Showcase your skills, projects, and journey as a developer. Connect, create, and inspire with a portfolio that truly represents you.
@@ -76,8 +76,8 @@ export default function Home() {
                   src={project.imageUrl}
                   alt={project.title}
                   width={600}
-                  height={400}
-                  className="object-cover w-full h-48" // Standardized height
+                  height={160} // Adjusted height to 160px (h-40)
+                  className="object-cover w-full h-40" // Use h-40 for 10rem/160px
                   data-ai-hint={project.imageHint}
                 />
               </CardHeader>
@@ -108,16 +108,15 @@ export default function Home() {
       </section>
 
       {/* AI Tool Teaser Section */}
-      <section className="py-12 bg-ai-tool-gradient"> {/* Updated class for dynamic gradient and glow */}
+      <section className="py-12 bg-ai-tool-gradient">
         <div className="container text-center">
-          <Lightbulb className="h-12 w-12 mx-auto mb-4 text-background" /> {/* text-background ensures visibility on gradient */}
-          <h2 className="text-3xl font-bold tracking-tight mb-4"> {/* text-primary-foreground for visibility */}
+          <Lightbulb className="h-12 w-12 mx-auto mb-4 text-background" />
+          <h2 className="text-3xl font-bold tracking-tight mb-4 text-primary-foreground">
             Craft Perfect Project Descriptions with AI
           </h2>
-          <p className="text-lg text-background/90 max-w-2xl mx-auto mb-8"> {/* text-primary-foreground/80 for visibility */}
+          <p className="text-lg text-background/90 max-w-2xl mx-auto mb-8">
             Struggling to describe your amazing projects? Let our AI tool help you generate compelling descriptions based on your project's features and technologies.
           </p>
-          {/* Button styling to ensure text is visible on the new gradient. ShadCN secondary might need adjustment if text is primary */}
           <Button 
             variant="secondary" 
             size="lg" 

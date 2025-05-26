@@ -20,7 +20,7 @@ const roboto = Roboto({
 });
 
 export const metadata: Metadata = {
-  title: 'DevFolio Connect',
+  title: 'علي علاء',
   description: 'A dynamic portfolio for developers by Firebase Studio.',
 };
 
@@ -46,3 +46,4 @@ export default function RootLayout({
     </html>
   );
 }
+

@@ -2,7 +2,7 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"; // Added CardDescription
 import { Progress } from "@/components/ui/progress";
 import { CloudSun, Zap, Code, Brain, Users } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -10,7 +10,7 @@ import Image from "next/image";
 
 // Mock data - replace with Firebase data later
 const developerInfo = {
-  name: "Alex Developer",
+  name: "Alex Developer", // This could be 'علي علاء' if it's personal branding
   title: "Full-Stack Web Developer",
   bio: "Passionate about creating intuitive and performant web experiences. With a strong foundation in modern JavaScript frameworks and backend technologies, I enjoy tackling complex challenges and continuously learning new skills. My goal is to build applications that are not only functional but also delightful to use.",
   avatarUrl: "https://placehold.co/200x200.png",
@@ -39,10 +39,8 @@ export default function AboutPage() {
   const [weatherError, setWeatherError] = useState<string | null>(null);
 
   useEffect(() => {
-    // This is a placeholder. Replace with a real API key and robust error handling.
-    // OpenWeather API Key - DO NOT COMMIT THIS DIRECTLY. Use environment variables.
-    const apiKey = process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY || "YOUR_OPENWEATHER_API_KEY"; // Replace with actual key or env var
-    const city = developerInfo.location.split(',')[0]; // Extract city name
+    const apiKey = process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY || "YOUR_OPENWEATHER_API_KEY"; 
+    const city = developerInfo.location.split(',')[0]; 
 
     if (apiKey === "YOUR_OPENWEATHER_API_KEY") {
       setWeatherError("OpenWeather API key not configured.");
