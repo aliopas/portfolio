@@ -3,7 +3,7 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"; // CardDescription was missing
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { CloudSun, Zap, Code, Brain, Users } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -11,7 +11,7 @@ import Image from "next/image";
 
 // Mock data - replace with Firebase data later
 const developerInfo = {
-  name: "AliAlaa", 
+  name: "AliAlaa",
   title: "Full-Stack Web Developer",
   bio: "Passionate about creating intuitive and performant web experiences. With a strong foundation in modern JavaScript frameworks and backend technologies, I enjoy tackling complex challenges and continuously learning new skills. My goal is to build applications that are not only functional but also delightful to use.",
   avatarUrl: "https://placehold.co/200x200.png",
@@ -41,11 +41,12 @@ export default function AboutPage() {
 
   useEffect(() => {
     const apiKey = process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY;
-    const city = developerInfo.location.split(',')[0]; 
+    const city = developerInfo.location.split(',')[0];
 
-    if (!apiKey || apiKey.includes("YOUR_OPENWEATHER_API_KEY")) { // Simplified check
-      setWeatherError("OpenWeather API key not configured. Please set it in the .env file.");
-      console.warn("OpenWeather API key is not configured. Please set NEXT_PUBLIC_OPENWEATHER_API_KEY in your .env file.");
+    if (!apiKey || apiKey.includes("YOUR_OPENWEATHER_API_KEY")) {
+      const errorMessage = "OpenWeather API key not configured or is placeholder. Please set NEXT_PUBLIC_OPENWEATHER_API_KEY in your .env file.";
+      setWeatherError(errorMessage);
+      console.warn(errorMessage);
       return;
     }
     
@@ -56,7 +57,7 @@ export default function AboutPage() {
         );
         if (!response.ok) {
           const errorData = await response.json();
-          throw new Error(`Weather API request failed: ${response.status} ${response.statusText}. ${errorData.message || ''}`);
+          throw new Error(`Weather API request failed: ${response.status} ${response.statusText}. Message: ${errorData.message || 'Unknown API error'}`);
         }
         const data = await response.json();
         setWeather({
@@ -69,7 +70,7 @@ export default function AboutPage() {
       } catch (error) {
         console.error("Failed to fetch weather:", error);
         if (error instanceof Error) {
-           setWeatherError(`Failed to fetch weather: ${error.message}`);
+           setWeatherError(`Failed to fetch weather data. ${error.message}`);
         } else {
            setWeatherError("An unknown error occurred while fetching weather data.");
         }
@@ -90,10 +91,12 @@ export default function AboutPage() {
       <Card className="shadow-lg overflow-hidden">
         <div className="md:flex">
           <div className="md:w-1/3 bg-gradient-to-br from-primary to-accent p-8 flex flex-col items-center justify-center text-center">
-            <Avatar className="w-32 h-32 border-4 border-background shadow-xl mb-4">
-              <AvatarImage src={developerInfo.avatarUrl} alt={developerInfo.name} data-ai-hint={developerInfo.avatarHint} />
-              <AvatarFallback className="text-4xl bg-background text-primary">{developerInfo.name.substring(0,1)}</AvatarFallback>
-            </Avatar>
+            <div className="avatar-animated-border p-1 rounded-full mb-4 inline-block">
+              <Avatar className="w-32 h-32 shadow-xl">
+                <AvatarImage src={developerInfo.avatarUrl} alt={developerInfo.name} data-ai-hint={developerInfo.avatarHint} />
+                <AvatarFallback className="text-4xl bg-card text-card-foreground">{developerInfo.name.substring(0,1)}</AvatarFallback>
+              </Avatar>
+            </div>
             <h2 className="text-2xl font-semibold text-primary-foreground">{developerInfo.name}</h2>
             <p className="text-md text-primary-foreground/80">{developerInfo.title}</p>
             {weather && (

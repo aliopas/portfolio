@@ -56,8 +56,6 @@
     --bg-glow-start-color: hsl(217, 80%, 93%); /* #DBEAFE */
     --bg-glow-end-color: hsl(210, 30%, 96%);   /* #F0F4F8 - Matches new background */
     --bg-glow-accent-color: hsl(217, 91%, 70%); /* Accent for glow based on primary */
-
-    /* AI Tool Specific Gradient Colors - Light Mode - REMOVED */
   }
 
   .dark {
@@ -110,8 +108,6 @@
     --bg-glow-start-color: hsl(222, 47%, 15%); /* #1E3A8A */
     --bg-glow-end-color: hsl(215, 28%, 21%);   /* #1F2937 */
     --bg-glow-accent-color: hsl(217, 94%, 68%); /* Glowing blue accent #60A5FA */
-
-    /* AI Tool Specific Gradient Colors - Dark Mode - REMOVED */
   }
 }
 
@@ -160,9 +156,14 @@
   .btn-glow svg {
     color: currentColor !important; /* Ensures SVGs inherit the forced color */
   }
-   .btn-glow > span {
+   .btn-glow > span { /* Target direct span children for text color */
     color: hsl(var(--foreground)) !important; /* Ensures spans also get the forced color */
   }
+   /* Ensure other direct text nodes or nested elements also get the color if needed */
+  .btn-glow > :not(svg):not(span.sr-only) {
+    color: hsl(var(--foreground)) !important;
+  }
+
 
   .btn-glow::before { /* Rotating conic gradient - must be behind ::after and content */
     content: "";
@@ -184,16 +185,17 @@
   .btn-glow::after { /* Solid background mimic - must be behind content */
     content: "";
     position: absolute;
-    inset: 2px;
+    inset: 2px; /* Controls the "border" thickness of the glow effect */
     background: hsl(var(--background));
     @apply rounded-md; /* Use Tailwind's rounded-md which matches button's default */
     z-index: -1; /* Behind content, on top of ::before */
   }
 
   /* Ensure button content (text, icons) is on top of pseudo-elements */
-  .btn-glow > :not(span.sr-only):not(svg ~ span):not(svg) {
+  .btn-glow > :not(span.sr-only):not(svg ~ span):not(svg):not(div) { /* Added :not(div) */
     @apply relative z-10;
   }
+  /* Explicitly target common button content elements */
   .btn-glow > span, .btn-glow > svg, .btn-glow > div {
     @apply relative z-10;
   }
@@ -204,7 +206,31 @@
     filter: brightness(1.2);
   }
 
-  /* Removed .bg-ai-tool-gradient and its related pseudo-elements */
+  .avatar-animated-border {
+    @apply rounded-full relative p-1 inline-block; /* p-1 makes a 4px border (0.25rem) */
+  }
+
+  .avatar-animated-border::before {
+    content: "";
+    position: absolute;
+    inset: 0; /* Cover the entire padded area of the wrapper */
+    border-radius: inherit; /* Match parent's rounding */
+    background: conic-gradient(
+      from 180deg at 50% 50%,
+      hsl(var(--accent)),
+      hsl(var(--primary)),
+      hsl(var(--secondary)),
+      hsl(var(--accent))
+    );
+    animation: rotate-glow 3s linear infinite;
+    z-index: 0; /* Gradient layer is behind the Avatar content */
+  }
+
+  /* ShadCN Avatar root is typically a span with data-radix-avatar-root */
+  .avatar-animated-border > span[data-radix-avatar-root] {
+    @apply relative z-10 block; /* Avatar content (image/fallback) sits on top */
+                                /* Its own background (or image) will cover the gradient's center */
+  }
 }
 
 @keyframes rotate-glow {
@@ -218,23 +244,21 @@
 
 @keyframes pulse-background {
   0% {
-    opacity: 0.6;
-    background: radial-gradient(ellipse at center, var(--bg-glow-start-color) 0%, var(--bg-glow-accent-color) 20%, var(--bg-glow-end-color) 70%);
+    opacity: 0.7; /* Start slightly more visible */
+    background: radial-gradient(ellipse at center, hsl(var(--bg-glow-start-color)) 0%, hsl(var(--bg-glow-accent-color)) 25%, hsl(var(--bg-glow-end-color)) 70%);
   }
   100% {
-    opacity: 0.9;
-    background: radial-gradient(ellipse at center, var(--bg-glow-start-color) 0%, var(--bg-glow-accent-color) 40%, var(--bg-glow-end-color) 70%);
+    opacity: 1; /* End fully visible (or slightly less if preferred) */
+    background: radial-gradient(ellipse at center, hsl(var(--bg-glow-start-color)) 0%, hsl(var(--bg-glow-accent-color)) 45%, hsl(var(--bg-glow-end-color)) 70%);
   }
 }
 @keyframes pulse-background-dark {
   0% {
-    opacity: 0.5;
-    background: radial-gradient(ellipse at center, var(--bg-glow-start-color) 0%, var(--bg-glow-accent-color) 20%, var(--bg-glow-end-color) 70%);
+    opacity: 0.6;
+    background: radial-gradient(ellipse at center, hsl(var(--bg-glow-start-color)) 0%, hsl(var(--bg-glow-accent-color)) 25%, hsl(var(--bg-glow-end-color)) 70%);
   }
   100% {
-    opacity: 0.8;
-     background: radial-gradient(ellipse at center, var(--bg-glow-start-color) 0%, var(--bg-glow-accent-color) 40%, var(--bg-glow-end-color) 70%);
+    opacity: 0.9;
+     background: radial-gradient(ellipse at center, hsl(var(--bg-glow-start-color)) 0%, hsl(var(--bg-glow-accent-color)) 45%, hsl(var(--bg-glow-end-color)) 70%);
   }
 }
-
-/* Removed pulse-ai-tool-background and pulse-ai-tool-background-dark keyframes */
