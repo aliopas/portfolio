@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/components/ui/dialog';
@@ -10,7 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { PlusCircle, Edit, Trash2, Search, ExternalLink, GithubIcon, Filter } from 'lucide-react';
-import { projectsData as initialProjects, Project, filterCategories } from '@/data/mockData';
+import { projectsData as initialProjects, Project } from '@/data/mockData'; // filterCategories removed as it will be dynamic
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import Image from 'next/image';
@@ -28,16 +28,17 @@ interface ProjectFormProps {
   project?: Project | null;
   onSave: (project: Project) => void;
   onClose: () => void;
+  existingCategories: string[]; // Pass existing categories to the form
 }
 
-function ProjectForm({ project: currentProject, onSave, onClose }: ProjectFormProps) {
+function ProjectForm({ project: currentProject, onSave, onClose, existingCategories }: ProjectFormProps) {
   const [title, setTitle] = useState(currentProject?.title || '');
   const [description, setDescription] = useState(currentProject?.description || '');
   const [category, setCategory] = useState(currentProject?.category || '');
-  const [rawCategoryInput, setRawCategoryInput] = useState(currentProject?.category || ''); // For the text input when "New Category" is selected
+  const [rawCategoryInput, setRawCategoryInput] = useState(currentProject?.category || '');
   const [isNewCategory, setIsNewCategory] = useState(false);
   const [technologies, setTechnologies] = useState(currentProject?.technologies.join(', ') || '');
-  const [tags, setTags] = useState(currentProject?.tags.join(', ') || '');
+  const [tags, setTags] = useState(currentProject?.tags.join(', ') || ''); // Added tags state
   const [imageUrl, setImageUrl] = useState(currentProject?.imageUrl || 'https://placehold.co/600x400.png');
   const [imageHint, setImageHint] = useState(currentProject?.imageHint || 'project image');
   const [githubLink, setGithubLink] = useState(currentProject?.githubLink || '');
@@ -45,26 +46,45 @@ function ProjectForm({ project: currentProject, onSave, onClose }: ProjectFormPr
 
   const { toast } = useToast();
   
-  const availableCategories = Array.from(new Set(initialProjects.map(p => p.category).filter(Boolean)));
+  // Use passed existingCategories for the dropdown
+  const availableCategories = useMemo(() => Array.from(new Set(existingCategories.filter(Boolean))), [existingCategories]);
 
 
   useEffect(() => {
+    // Effect to setup form state when currentProject or availableCategories change
     if (currentProject) {
-        const isExistingCategory = availableCategories.includes(currentProject.category);
-        if (!isExistingCategory && currentProject.category) {
-            setIsNewCategory(true);
-            setRawCategoryInput(currentProject.category); // Set input field if category is custom
-            setCategory("New Category"); // Set select to "New Category"
-        } else {
-            setIsNewCategory(false);
-            setCategory(currentProject.category);
-            setRawCategoryInput(currentProject.category);
-        }
-    } else {
-        // New project
+      setTitle(currentProject.title);
+      setDescription(currentProject.description);
+      setTechnologies(currentProject.technologies.join(', '));
+      setTags(currentProject.tags.join(', ')); // Set tags for editing
+      setImageUrl(currentProject.imageUrl || 'https://placehold.co/600x400.png');
+      setImageHint(currentProject.imageHint || 'project image');
+      setGithubLink(currentProject.githubLink || '');
+      setLiveLink(currentProject.liveLink || '');
+
+      const isExistingCat = availableCategories.includes(currentProject.category);
+      if (!isExistingCat && currentProject.category) {
+        setIsNewCategory(true);
+        setRawCategoryInput(currentProject.category);
+        setCategory("New Category");
+      } else {
         setIsNewCategory(false);
-        setCategory("");
-        setRawCategoryInput("");
+        setCategory(currentProject.category);
+        setRawCategoryInput(currentProject.category);
+      }
+    } else {
+      // Reset form for new project
+      setTitle('');
+      setDescription('');
+      setTechnologies('');
+      setTags(''); // Reset tags for new project
+      setImageUrl('https://placehold.co/600x400.png');
+      setImageHint('project image');
+      setGithubLink('');
+      setLiveLink('');
+      setIsNewCategory(false);
+      setCategory('');
+      setRawCategoryInput('');
     }
   }, [currentProject, availableCategories]);
 
@@ -73,7 +93,7 @@ function ProjectForm({ project: currentProject, onSave, onClose }: ProjectFormPr
     setCategory(value);
     if (value === "New Category") {
       setIsNewCategory(true);
-      setRawCategoryInput(''); // Clear input when switching to new category
+      setRawCategoryInput(''); 
     } else {
       setIsNewCategory(false);
       setRawCategoryInput(value);
@@ -98,11 +118,22 @@ function ProjectForm({ project: currentProject, onSave, onClose }: ProjectFormPr
     if (isNewCategory && (finalCategory === "New Category" || finalCategory === "")) {
          toast({
             title: "Invalid Category",
-            description: "Please enter a valid name for the new category.",
+            description: "Please enter a valid name for the new category, or select an existing one.",
             variant: "destructive",
         });
         return;
     }
+    
+    const processedTags = tags.split(',').map(tag => tag.trim()).filter(Boolean);
+    if (processedTags.some(tag => tag.length > 50)) { // Example validation for tag length
+        toast({
+            title: "Validation Error",
+            description: "Tags should not exceed 50 characters.",
+            variant: "destructive",
+        });
+        return;
+    }
+
 
     onSave({
       id: currentProject?.id || Date.now().toString(),
@@ -110,7 +141,7 @@ function ProjectForm({ project: currentProject, onSave, onClose }: ProjectFormPr
       description,
       category: finalCategory,
       technologies: technologies.split(',').map(tech => tech.trim()).filter(Boolean),
-      tags: tags.split(',').map(tag => tag.trim()).filter(Boolean),
+      tags: processedTags, // Save processed tags
       imageUrl,
       imageHint,
       githubLink: githubLink || null,
@@ -159,7 +190,7 @@ function ProjectForm({ project: currentProject, onSave, onClose }: ProjectFormPr
       </div>
        <div>
           <Label htmlFor="tags">Tags (comma-separated)</Label>
-          <Input id="tags" value={tags} onChange={(e) => setTags(e.target.value)} />
+          <Input id="tags" value={tags} onChange={(e) => setTags(e.target.value)} placeholder="e.g., react, full-stack, api" />
         </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
@@ -224,7 +255,7 @@ export default function ManageProjectsPage() {
       setProjects(projects.map(p => (p.id === projectToSave.id ? projectToSave : p)));
       toast({ title: "Project Updated", description: `"${projectToSave.title}" has been updated.`});
     } else {
-      // Add new project to the beginning of the list
+      // Add new project to the beginning of the list for better UX
       setProjects([{ ...projectToSave, id: Date.now().toString() }, ...projects]);
        toast({ title: "Project Added", description: `"${projectToSave.title}" has been added.`});
     }
@@ -232,17 +263,22 @@ export default function ManageProjectsPage() {
     setEditingProject(null);
   };
   
-  const filteredProjects = projects.filter(project => {
-    const matchesSearchTerm = project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                              project.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                              project.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                              project.technologies.join(' ').toLowerCase().includes(searchTerm.toLowerCase()) ||
-                              project.tags.join(' ').toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = categoryFilter === "All" || project.category === categoryFilter;
-    return matchesSearchTerm && matchesCategory;
-  });
-  
-  const uniqueCategoriesForFilter = ["All", ...new Set(projects.map(p => p.category).filter(Boolean))];
+  // Derive unique categories for filter from the current projects state
+  const uniqueCategoriesForFilter = useMemo(() => {
+    return ["All", ...Array.from(new Set(projects.map(p => p.category).filter(Boolean)))];
+  }, [projects]);
+
+  const filteredProjects = useMemo(() => {
+    return projects.filter(project => {
+      const matchesSearchTerm = project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                project.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                project.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                project.technologies.join(' ').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                project.tags.join(' ').toLowerCase().includes(searchTerm.toLowerCase()); // Search in tags too
+      const matchesCategory = categoryFilter === "All" || project.category === categoryFilter;
+      return matchesSearchTerm && matchesCategory;
+    });
+  }, [projects, searchTerm, categoryFilter]);
 
 
   return (
@@ -267,7 +303,7 @@ export default function ManageProjectsPage() {
                     <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                     <Input
                         type="search"
-                        placeholder="Search projects..."
+                        placeholder="Search projects by title, desc, category, tech, tags..."
                         className="pl-8 w-full"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
@@ -275,7 +311,7 @@ export default function ManageProjectsPage() {
                 </div>
                 <div className="flex items-center gap-2">
                   <Filter className="h-4 w-4 text-muted-foreground" />
-                  <Select onValueChange={setCategoryFilter} defaultValue={categoryFilter}>
+                  <Select onValueChange={setCategoryFilter} value={categoryFilter}> {/* Controlled component */}
                     <SelectTrigger className="w-full md:w-[180px]">
                       <SelectValue placeholder="Filter by category" />
                     </SelectTrigger>
@@ -296,7 +332,7 @@ export default function ManageProjectsPage() {
                   <TableHead className="w-[80px]">Image</TableHead>
                   <TableHead>Title</TableHead>
                   <TableHead>Category</TableHead>
-                  <TableHead>Tags</TableHead>
+                  <TableHead>Tags</TableHead> {/* Changed from Technologies to Tags */}
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -311,25 +347,25 @@ export default function ManageProjectsPage() {
                     <TableCell>
                       <div className="flex flex-wrap gap-1">
                         {project.tags.slice(0,3).map(tag => <Badge key={tag} variant="secondary" className="text-xs">{tag}</Badge>)}
-                        {project.tags.length > 3 && <Badge variant="secondary" className="text-xs">+{project.tags.length - 3}</Badge>}
+                        {project.tags.length > 3 && <Badge variant="outline" className="text-xs">+{project.tags.length - 3}</Badge>}
                       </div>
                     </TableCell>
                     <TableCell className="text-right">
-                      <div className="flex gap-2 justify-end">
+                      <div className="flex gap-1 sm:gap-2 justify-end"> {/* Adjusted gap for responsiveness */}
                         {project.liveLink && (
                           <Button variant="ghost" size="icon" asChild>
-                            <Link href={project.liveLink} target="_blank"><ExternalLink className="h-4 w-4" /></Link>
+                            <Link href={project.liveLink} target="_blank" title="Live Demo"><ExternalLink className="h-4 w-4" /></Link>
                           </Button>
                         )}
                         {project.githubLink && (
                           <Button variant="ghost" size="icon" asChild>
-                            <Link href={project.githubLink} target="_blank"><GithubIcon className="h-4 w-4" /></Link>
+                            <Link href={project.githubLink} target="_blank" title="GitHub"><GithubIcon className="h-4 w-4" /></Link>
                           </Button>
                         )}
-                        <Button variant="ghost" size="icon" onClick={() => handleEditProject(project)}>
+                        <Button variant="ghost" size="icon" onClick={() => handleEditProject(project)} title="Edit">
                           <Edit className="h-4 w-4" />
                         </Button>
-                        <Button variant="ghost" size="icon" onClick={() => handleDeleteProject(project.id)} className="text-destructive hover:text-destructive">
+                        <Button variant="ghost" size="icon" onClick={() => handleDeleteProject(project.id)} className="text-destructive hover:text-destructive" title="Delete">
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
@@ -337,23 +373,25 @@ export default function ManageProjectsPage() {
                   </TableRow>
                 )) : (
                   <TableRow>
-                    <TableCell colSpan={5} className="text-center h-24">No projects found matching your criteria.</TableCell>
+                    <TableCell colSpan={5} className="text-center h-24">
+                      {projects.length === 0 ? "No projects yet. Click 'Add New Project' to start." : "No projects found matching your criteria."}
+                    </TableCell>
                   </TableRow>
                 )}
               </TableBody>
             </Table>
           </div>
         </CardContent>
-         {filteredProjects.length > 5 && (
+         {filteredProjects.length > 5 && ( // Show footer only if many projects are shown
           <CardFooter className="justify-center border-t pt-4">
-            <p className="text-xs text-muted-foreground">Showing {filteredProjects.length} projects</p>
+            <p className="text-xs text-muted-foreground">Showing {filteredProjects.length} of {projects.length} projects</p>
           </CardFooter>
         )}
       </Card>
 
       <Dialog open={isFormOpen} onOpenChange={(isOpen) => {
           setIsFormOpen(isOpen);
-          if (!isOpen) setEditingProject(null);
+          if (!isOpen) setEditingProject(null); // Reset editing project on close
       }}>
         <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
           <DialogHeader>
@@ -369,9 +407,12 @@ export default function ManageProjectsPage() {
                 setIsFormOpen(false);
                 setEditingProject(null);
             }}
+            existingCategories={uniqueCategoriesForFilter.filter(cat => cat !== "All")} // Pass current categories to form
           />
         </DialogContent>
       </Dialog>
     </div>
   );
 }
+
+    

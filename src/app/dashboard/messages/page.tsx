@@ -160,7 +160,7 @@ export default function ManageMessagesPage() {
                   <TableRow key={message.id} className={cn(!message.read && "bg-primary/5 font-medium")}>
                     <TableCell>
                       {!message.read ? (
-                        <Badge variant="default">New</Badge>
+                        <Badge variant="default">New</Badge> 
                       ) : (
                         <Badge variant="outline">Read</Badge>
                       )}
@@ -173,13 +173,13 @@ export default function ManageMessagesPage() {
                     <TableCell className="text-xs">{format(parseISO(message.date), "MMM d, yyyy, HH:mm")}</TableCell>
                     <TableCell className="text-right">
                       <div className="flex gap-1 justify-end">
-                        <Button variant="ghost" size="icon" onClick={() => handleViewMessage(message)}>
+                        <Button variant="ghost" size="icon" onClick={() => handleViewMessage(message)} title="View Message">
                           <Eye className="h-4 w-4" />
                         </Button>
-                        <Button variant="ghost" size="icon" onClick={() => handleToggleReadStatus(message.id)}>
+                        <Button variant="ghost" size="icon" onClick={() => handleToggleReadStatus(message.id)} title={message.read ? "Mark as Unread" : "Mark as Read"}>
                           {message.read ? <Mail className="h-4 w-4" /> : <CheckCircle className="h-4 w-4 text-green-500" />}
                         </Button>
-                        <Button variant="ghost" size="icon" onClick={() => handleDeleteMessage(message.id)} className="text-destructive hover:text-destructive">
+                        <Button variant="ghost" size="icon" onClick={() => handleDeleteMessage(message.id)} className="text-destructive hover:text-destructive" title="Delete Message">
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
@@ -219,7 +219,10 @@ export default function ManageMessagesPage() {
               <p className="text-sm whitespace-pre-wrap bg-muted/50 p-3 rounded-md">{selectedMessage.message}</p>
             </div>
             <DialogFooter className="mt-auto">
-              <Button variant="outline" onClick={() => handleToggleReadStatus(selectedMessage.id)}>
+              <Button variant="outline" onClick={() => {
+                handleToggleReadStatus(selectedMessage.id);
+                // No need to manually close the dialog here, but you could if desired
+              }}>
                 {selectedMessage.read ? "Mark as Unread" : "Mark as Read"}
               </Button>
               <DialogClose asChild>
@@ -233,3 +236,4 @@ export default function ManageMessagesPage() {
   );
 }
 
+    
