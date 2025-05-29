@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, CalendarDays, UserCircle } from "lucide-react";
@@ -44,12 +45,7 @@ export default function BlogPage() {
         </p>
       </header>
 
-      {/* Add New Post button (for authenticated users - placeholder) */}
-      <div className="text-right">
-        <Button variant="default">
-          <Link href="/blog/new">Create New Post</Link>
-        </Button>
-      </div>
+      {/* "Create New Post" button removed from here */}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {blogPosts.map((post) => (
