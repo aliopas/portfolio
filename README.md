@@ -31,10 +31,6 @@ This project utilizes a modern tech stack for a robust and performant web applic
     *   **Role:** A library of simply beautiful and consistent SVG icons.
     *   **Usage:** Provides most of the icons used throughout the application for navigation, actions, and visual cues.
 
-*   **Genkit (with Google AI):**
-    *   **Role:** An open-source framework for building AI-powered features.
-    *   **Usage:** Configured in the project (`src/ai/`) for potential AI integrations. (Note: The AI tool feature was previously removed, but the Genkit setup remains for future use).
-
 *   **Recharts:**
     *   **Role:** A composable charting library built on React components.
     *   **Usage:** Used to display charts and graphs on the admin dashboard (e.g., content views, engagement).
