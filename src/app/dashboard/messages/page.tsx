@@ -7,23 +7,19 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter }
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from '@/components/ui/dialog';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Mail, Eye, Trash2, Search, Inbox, CheckCircle, Filter, Loader2 } from 'lucide-react';
-import type { Message } from '@/data/mockData'; // Using type from mockData for structure
+import { messagesData as initialMessages, type Message } from '@/data/mockData'; // Using type from mockData for structure
 import { Badge } from '@/components/ui/badge';
 import { format, parseISO } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { db } from '@/lib/firebase';
-import { collection, query, orderBy, getDocs, doc, updateDoc, deleteDoc, type Timestamp } from 'firebase/firestore';
+// Firebase Firestore imports are removed
 
 // Helper function to format date from various types
-const formatDate = (dateValue: Timestamp | Date | string): string => {
+const formatDate = (dateValue: Date | string): string => {
   if (typeof dateValue === 'string') {
     return format(parseISO(dateValue), "MMM d, yyyy, HH:mm");
-  }
-  if (dateValue && typeof (dateValue as Timestamp).toDate === 'function') {
-    return format((dateValue as Timestamp).toDate(), "MMM d, yyyy, HH:mm");
   }
   if (dateValue instanceof Date) {
     return format(dateValue, "MMM d, yyyy, HH:mm");
@@ -32,12 +28,9 @@ const formatDate = (dateValue: Timestamp | Date | string): string => {
 };
 
 // Helper function to format date for dialog
-const formatDateForDialog = (dateValue: Timestamp | Date | string): string => {
+const formatDateForDialog = (dateValue: Date | string): string => {
     if (typeof dateValue === 'string') {
       return format(parseISO(dateValue), "PPPp");
-    }
-    if (dateValue && typeof (dateValue as Timestamp).toDate === 'function') {
-      return format((dateValue as Timestamp).toDate(), "PPPp");
     }
     if (dateValue instanceof Date) {
       return format(dateValue, "PPPp");
@@ -47,8 +40,8 @@ const formatDateForDialog = (dateValue: Timestamp | Date | string): string => {
 
 
 export default function ManageMessagesPage() {
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [messages, setMessages] = useState<Message[]>(initialMessages); // Use mock data
+  const [isLoading, setIsLoading] = useState(false); // Keep for potential future async ops
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -56,95 +49,42 @@ export default function ManageMessagesPage() {
 
   const { toast } = useToast();
 
-  useEffect(() => {
-    const fetchMessages = async () => {
-      setIsLoading(true);
-      try {
-        const q = query(collection(db, 'messages'), orderBy('date', 'desc'));
-        const querySnapshot = await getDocs(q);
-        const fetchedMessages: Message[] = querySnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data(),
-          // Date is already a Firestore Timestamp or will be handled by formatDate
-        } as Message));
-        setMessages(fetchedMessages);
-      } catch (error) {
-        console.error("Error fetching messages: ", error);
-        toast({
-          title: "Error Fetching Messages",
-          description: "Could not load messages from the database.",
-          variant: "destructive",
-        });
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  // useEffect for fetching from Firestore is removed
 
-    fetchMessages();
-  }, [toast]);
-
-  const handleViewMessage = async (messageToView: Message) => {
+  const handleViewMessage = (messageToView: Message) => {
     let messageForDialog = { ...messageToView };
 
     if (!messageToView.read) {
-      try {
-        const messageRef = doc(db, 'messages', messageToView.id);
-        await updateDoc(messageRef, { read: true });
-        messageForDialog.read = true; // Update for dialog
-        // Update in local state
-        setMessages(prevMessages =>
-          prevMessages.map(msg =>
-            msg.id === messageToView.id ? { ...msg, read: true } : msg
-          )
-        );
-      } catch (error) {
-        console.error("Error marking message as read:", error);
-        toast({
-          title: "Error",
-          description: "Could not mark message as read.",
-          variant: "destructive"
-        });
-        // Proceed to open dialog with original state if update failed
-      }
+      messageForDialog.read = true; // Update for dialog
+      // Update in local state
+      setMessages(prevMessages =>
+        prevMessages.map(msg =>
+          msg.id === messageToView.id ? { ...msg, read: true } : msg
+        )
+      );
     }
     setSelectedMessage(messageForDialog);
     setIsViewDialogOpen(true);
   };
 
-  const handleDeleteMessage = async (messageId: string) => {
-    // Optimistic UI update
-    const originalMessages = [...messages];
+  const handleDeleteMessage = (messageId: string) => {
     setMessages(messages.filter(msg => msg.id !== messageId));
-
-    try {
-      await deleteDoc(doc(db, 'messages', messageId));
-      toast({
-        title: "Message Deleted",
-        description: "The message has been removed.",
-      });
-      if (selectedMessage && selectedMessage.id === messageId) {
-        setIsViewDialogOpen(false);
-        setSelectedMessage(null);
-      }
-    } catch (error) {
-      console.error("Error deleting message:", error);
-      setMessages(originalMessages); // Revert UI on error
-      toast({
-        title: "Error Deleting Message",
-        description: "Could not delete the message.",
-        variant: "destructive",
-      });
+    toast({
+      title: "Message Deleted",
+      description: "The message has been removed (from local view).",
+    });
+    if (selectedMessage && selectedMessage.id === messageId) {
+      setIsViewDialogOpen(false);
+      setSelectedMessage(null);
     }
   };
   
-  const handleToggleReadStatus = async (messageId: string) => {
+  const handleToggleReadStatus = (messageId: string) => {
     const messageToUpdate = messages.find(msg => msg.id === messageId);
     if (!messageToUpdate) return;
 
     const newReadState = !messageToUpdate.read;
     
-    // Optimistic UI update
-    const originalMessages = [...messages];
     setMessages(prevMessages =>
       prevMessages.map(msg =>
         msg.id === messageId ? { ...msg, read: newReadState } : msg
@@ -153,26 +93,10 @@ export default function ManageMessagesPage() {
     if (selectedMessage && selectedMessage.id === messageId) {
       setSelectedMessage(prev => prev ? {...prev, read: newReadState} : null);
     }
-
-    try {
-      const messageRef = doc(db, 'messages', messageId);
-      await updateDoc(messageRef, { read: newReadState });
-      toast({
-        title: `Message Marked as ${newReadState ? 'Read' : 'Unread'}`,
-        description: "The message status has been updated.",
-      });
-    } catch (error) {
-      console.error("Error toggling read status:", error);
-      setMessages(originalMessages); // Revert UI on error
-      if (selectedMessage && selectedMessage.id === messageId) {
-        setSelectedMessage(prev => prev ? {...prev, read: !newReadState} : null);
-      }
-      toast({
-        title: "Error Updating Status",
-        description: "Could not update message read status.",
-        variant: "destructive",
-      });
-    }
+    toast({
+      title: `Message Marked as ${newReadState ? 'Read' : 'Unread'}`,
+      description: "The message status has been updated (in local view).",
+    });
   };
 
   const filteredMessages = useMemo(() => {
@@ -201,7 +125,7 @@ export default function ManageMessagesPage() {
           <div>
             <CardTitle className="text-2xl">View Messages</CardTitle>
             <CardDescription>
-              Review messages sent through your contact form. {unreadCount > 0 ? `${unreadCount} unread.` : 'All messages read.'}
+              Review messages sent through your contact form. {unreadCount > 0 ? `${unreadCount} unread.` : 'All messages read.'} (Using Mock Data)
             </CardDescription>
           </div>
         </CardHeader>
@@ -237,7 +161,7 @@ export default function ManageMessagesPage() {
           </div>
         </CardHeader>
         <CardContent>
-          {isLoading ? (
+          {isLoading ? ( // Kept for UI consistency, though not actively fetching from DB now
             <div className="flex justify-center items-center h-64">
               <Loader2 className="h-8 w-8 animate-spin text-primary" />
               <p className="ml-2">Loading messages...</p>
@@ -287,7 +211,7 @@ export default function ManageMessagesPage() {
                   )) : (
                      <TableRow>
                       <TableCell colSpan={5} className="h-24 text-center">
-                        {messages.length === 0 && !isLoading ? "No messages yet. Messages from your contact form will appear here." : "No messages match your current filter."}
+                        {messages.length === 0 && !isLoading ? "No messages yet (using mock data)." : "No messages match your current filter."}
                       </TableCell>
                     </TableRow>
                   )}

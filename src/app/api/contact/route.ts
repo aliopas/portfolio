@@ -1,8 +1,7 @@
 
 // src/app/api/contact/route.ts
 import { NextResponse } from 'next/server';
-import { db } from '@/lib/firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+// Firebase Firestore related imports like db, collection, addDoc, serverTimestamp are removed.
 
 export async function POST(request: Request) {
   try {
@@ -18,20 +17,17 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: 'Invalid email format.' }, { status: 400 });
     }
 
-    const newMessage = {
-      name,
-      email,
-      subject: subject || '', // Optional subject
-      message,
-      date: serverTimestamp(), // Firestore server timestamp
-      read: false,
-    };
+    // Simulate saving the message (since Firestore is removed)
+    console.log("Simulating message save for:", { name, email, subject, message });
 
-    const docRef = await addDoc(collection(db, 'messages'), newMessage);
+    // In a real scenario without a database, you might:
+    // - Send an email notification
+    // - Log to a file (if running in a Node.js server environment, not directly applicable here for client-side form)
+    // For now, we just return success.
 
-    return NextResponse.json({ message: 'Message sent successfully!', id: docRef.id }, { status: 201 });
+    return NextResponse.json({ message: 'Message sent successfully! (Simulated - not saved to DB)' }, { status: 201 });
   } catch (error) {
-    console.error('Error sending message:', error);
+    console.error('Error processing contact form (simulation):', error);
     let errorMessage = 'Failed to send message.';
     if (error instanceof Error) {
         errorMessage = error.message;
