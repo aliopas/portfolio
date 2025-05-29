@@ -10,11 +10,11 @@ import { Zap, Code, Brain, Users } from "lucide-react";
 // Mock data - replace with Firebase data later
 const developerInfo = {
   name: "AliAlaa",
-  title: "Full-Stack Web Developer",
+  title: "Full-Stack Developer & AI Integration Specialist",
   bio: `Ali Alaa - Full-Stack Developer & AI Integration Specialist
 
 Who I Am
-I'm Ali Alaa, a Full-Stack Developer who specializes in building intelligent web applications that solve real problems. I combine modern web technologies with AI integration to create scalable, high-performance solutions that users love.
+I'm AliAlaa, a Full-Stack Developer who specializes in building intelligent web applications that solve real problems. I combine modern web technologies with AI integration to create scalable, high-performance solutions that users love.
 
 Core Expertise
 Frontend: React, Next.js, TypeScript - Building lightning-fast, responsive applications
@@ -64,8 +64,10 @@ export default function AboutPage() {
       </header>
 
       <Card className="shadow-lg overflow-hidden">
-        <div className="md:flex">
-          <div className="md:w-1/3 bg-gradient-to-br from-primary to-accent p-8 flex flex-col items-center justify-center text-center">
+        {/* Removed md:flex from this div to stack children vertically */}
+        <div>
+          {/* This section (Avatar, Name, Title, Location) will now be on top */}
+          <div className="bg-gradient-to-br from-primary to-accent p-8 flex flex-col items-center justify-center text-center"> {/* Removed md:w-1/3 */}
             <div className="avatar-animated-border p-1 rounded-full mb-4 inline-block">
               <Avatar className="w-32 h-32 shadow-xl">
                 <AvatarImage src={developerInfo.avatarUrl} alt={developerInfo.name} data-ai-hint={developerInfo.avatarHint} />
@@ -76,7 +78,8 @@ export default function AboutPage() {
             <p className="text-md text-primary-foreground/80">{developerInfo.title}</p>
             <p className="text-sm text-primary-foreground/70 mt-2">{developerInfo.location}</p>
           </div>
-          <div className="md:w-2/3 p-8">
+          {/* This section (My Story/Bio) will now be below the Avatar section */}
+          <div className="p-8"> {/* Removed md:w-2/3 */}
             <h3 className="text-2xl font-semibold text-primary mb-4">My Story</h3>
             <p className="text-foreground/80 leading-relaxed whitespace-pre-line">
               {developerInfo.bio}
