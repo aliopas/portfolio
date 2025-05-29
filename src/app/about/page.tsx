@@ -40,7 +40,7 @@ Cloud: AWS, Vercel, Docker
 Let's Build Something Great
 Ready to transform your idea into an intelligent, scalable application? Let's connect and create something extraordinary together.`,
   avatarUrl: "https://placehold.co/200x200.png",
-  avatarHint: "developer portrait",
+  avatarHint: "ali alaa",
   location: "Cairo, Egypt",
   skills: [
     { name: "JavaScript", level: 95, icon: <Code className="h-4 w-4 text-yellow-500" /> },
@@ -67,7 +67,7 @@ export default function AboutPage() {
         {/* Removed md:flex from this div to stack children vertically */}
         <div>
           {/* This section (Avatar, Name, Title, Location) will now be on top */}
-          <div className="bg-gradient-to-br from-primary to-accent p-8 flex flex-col items-center justify-center text-center"> {/* Removed md:w-1/3 */}
+          <div className="bg-gradient-to-br from-primary via-secondary to-accent p-8 flex flex-col items-center justify-center text-center"> {/* Removed md:w-1/3 */}
             <div className="avatar-animated-border p-1 rounded-full mb-4 inline-block">
               <Avatar className="w-32 h-32 shadow-xl">
                 <AvatarImage src={developerInfo.avatarUrl} alt={developerInfo.name} data-ai-hint={developerInfo.avatarHint} />
