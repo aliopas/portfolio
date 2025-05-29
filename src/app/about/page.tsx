@@ -16,7 +16,7 @@ const developerInfo = {
   bio: "Passionate about creating intuitive and performant web experiences. With a strong foundation in modern JavaScript frameworks and backend technologies, I enjoy tackling complex challenges and continuously learning new skills. My goal is to build applications that are not only functional but also delightful to use.",
   avatarUrl: "https://placehold.co/200x200.png",
   avatarHint: "developer portrait",
-  location: "San Francisco, CA", // For weather API
+  location: "San Francisco, CA", 
   skills: [
     { name: "JavaScript", level: 95, icon: <Code className="h-4 w-4 text-yellow-500" /> },
     { name: "React & Next.js", level: 90, icon: <Zap className="h-4 w-4 text-sky-500" /> },
@@ -32,7 +32,7 @@ interface WeatherData {
   description: string;
   temperature: number;
   city: string;
-  icon: string;
+  iconUrl: string; // Changed to iconUrl as WeatherAPI provides a full URL
 }
 
 export default function AboutPage() {
@@ -40,11 +40,11 @@ export default function AboutPage() {
   const [weatherError, setWeatherError] = useState<string | null>(null);
 
   useEffect(() => {
-    const apiKey = process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY;
-    const city = developerInfo.location.split(',')[0];
+    const apiKey = process.env.NEXT_PUBLIC_WEATHERAPI_KEY;
+    const locationQuery = developerInfo.location; // Use the full location string for query
 
-    if (!apiKey || apiKey.includes("YOUR_OPENWEATHER_API_KEY")) {
-      const errorMessage = "OpenWeather API key not configured or is placeholder. Please set NEXT_PUBLIC_OPENWEATHER_API_KEY in your .env file.";
+    if (!apiKey || apiKey.includes("YOUR_WEATHERAPI_KEY")) {
+      const errorMessage = "WeatherAPI.com key not configured or is placeholder. Please set NEXT_PUBLIC_WEATHERAPI_KEY in your .env file.";
       setWeatherError(errorMessage);
       console.warn(errorMessage);
       return;
@@ -53,20 +53,25 @@ export default function AboutPage() {
     async function fetchWeather() {
       try {
         const response = await fetch(
-          `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`
+          `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${locationQuery}&aqi=no`
         );
         if (!response.ok) {
           const errorData = await response.json();
-          throw new Error(`Weather API request failed: ${response.status} ${response.statusText}. Message: ${errorData.message || 'Unknown API error'}`);
+          throw new Error(`WeatherAPI request failed: ${response.status} ${response.statusText}. Message: ${errorData.error?.message || 'Unknown API error'}`);
         }
         const data = await response.json();
-        setWeather({
-          description: data.weather[0].description,
-          temperature: Math.round(data.main.temp),
-          city: data.name,
-          icon: data.weather[0].icon,
-        });
-        setWeatherError(null);
+        
+        if (data && data.current && data.location) {
+            setWeather({
+              description: data.current.condition.text,
+              temperature: Math.round(data.current.temp_c),
+              city: data.location.name,
+              iconUrl: data.current.condition.icon, // This is a URL like //cdn.weatherapi.com/...
+            });
+            setWeatherError(null);
+        } else {
+            throw new Error("WeatherAPI response format unexpected.");
+        }
       } catch (error) {
         console.error("Failed to fetch weather:", error);
         if (error instanceof Error) {
@@ -103,7 +108,8 @@ export default function AboutPage() {
               <Badge variant="secondary" className="mt-3 bg-background/20 text-primary-foreground backdrop-blur-sm">
                 <CloudSun className="mr-2 h-4 w-4" />
                 {weather.city}: {weather.temperature}°C, {weather.description}
-                {weather.icon && <Image src={`https://openweathermap.org/img/wn/${weather.icon}.png`} alt="weather icon" width={24} height={24} className="ml-1" />}
+                {/* WeatherAPI icons are full URLs, ensure the domain is whitelisted in next.config.js */}
+                {weather.iconUrl && <Image src={`https:${weather.iconUrl}`} alt="weather icon" width={32} height={32} className="ml-1 inline-block" />}
               </Badge>
             )}
             {weatherError && (
