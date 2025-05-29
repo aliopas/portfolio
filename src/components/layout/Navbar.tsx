@@ -7,7 +7,7 @@ import { Menu, X, Sun, Moon, LogIn, LayoutDashboard, LogOut } from 'lucide-react
 import React, { useState, useEffect } from 'react';
 
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'; // Added SheetHeader, SheetTitle
 import { cn } from '@/lib/utils';
 import { Logo } from '@/components/Logo';
 import { useTheme } from '@/context/ThemeContext';
@@ -18,7 +18,6 @@ const navItems = [
   { href: '/blog', label: 'Blog' },
   { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },
-  // { href: '/ai-project-description', label: 'AI Tool' }, // Removed AI Tool link
 ];
 
 // Mock authentication hook (replace with actual context/logic)
@@ -159,6 +158,9 @@ export function Navbar() {
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-full max-w-xs sm:max-w-sm pt-0 flex flex-col p-0">
+              <SheetHeader className="sr-only">
+                <SheetTitle>Main Menu</SheetTitle>
+              </SheetHeader>
               <div className="flex items-center justify-between px-6 h-16 border-b">
                  <Logo />
                  <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(false)}>
