@@ -5,16 +5,43 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Zap, Code, Brain, Users } from "lucide-react"; // CloudSun removed
+import { Zap, Code, Brain, Users } from "lucide-react";
 
 // Mock data - replace with Firebase data later
 const developerInfo = {
   name: "AliAlaa",
   title: "Full-Stack Web Developer",
-  bio: "Passionate about creating intuitive and performant web experiences. With a strong foundation in modern JavaScript frameworks and backend technologies, I enjoy tackling complex challenges and continuously learning new skills. My goal is to build applications that are not only functional but also delightful to use.",
+  bio: `Ali Alaa - Full-Stack Developer & AI Integration Specialist
+
+Who I Am
+I'm Ali Alaa, a Full-Stack Developer who specializes in building intelligent web applications that solve real problems. I combine modern web technologies with AI integration to create scalable, high-performance solutions that users love.
+
+Core Expertise
+Frontend: React, Next.js, TypeScript - Building lightning-fast, responsive applications
+Backend: Node.js, Express, Database Design - Architecting robust, scalable APIs
+AI Integration: Machine Learning, NLP, Predictive Analytics - Adding intelligence to every application
+
+What Makes Me Different
+🚀 Performance-First: Every app I build is optimized for speed and scalability
+🤖 AI-Native: I integrate AI as a core feature, not an afterthought
+🎯 User-Focused: Technology should serve people and solve real problems
+
+My Approach
+I don't just write code—I craft solutions. Whether it's a personalized recommendation system, intelligent analytics dashboard, or scalable web platform, I focus on delivering applications that grow with your business and genuinely improve user experiences.
+
+Tech Stack
+Languages: JavaScript, TypeScript, Python
+Frontend: React, Next.js, Tailwind CSS
+Backend: Node.js, Express, GraphQL, REST APIs
+Databases: MongoDB, PostgreSQL, Firebase
+AI/ML: TensorFlow.js, OpenAI API, Custom Models
+Cloud: AWS, Vercel, Docker
+
+Let's Build Something Great
+Ready to transform your idea into an intelligent, scalable application? Let's connect and create something extraordinary together.`,
   avatarUrl: "https://placehold.co/200x200.png",
   avatarHint: "developer portrait",
-  location: "San Francisco, CA",
+  location: "Cairo, Egypt",
   skills: [
     { name: "JavaScript", level: 95, icon: <Code className="h-4 w-4 text-yellow-500" /> },
     { name: "React & Next.js", level: 90, icon: <Zap className="h-4 w-4 text-sky-500" /> },
@@ -26,11 +53,7 @@ const developerInfo = {
   ],
 };
 
-// WeatherData interface and related state/effects removed
-
 export default function AboutPage() {
-  // Weather state and useEffect removed
-
   return (
     <div className="space-y-12">
       <header className="text-center">
@@ -51,7 +74,7 @@ export default function AboutPage() {
             </div>
             <h2 className="text-2xl font-semibold text-primary-foreground">{developerInfo.name}</h2>
             <p className="text-md text-primary-foreground/80">{developerInfo.title}</p>
-            {/* Weather display section removed */}
+            <p className="text-sm text-primary-foreground/70 mt-2">{developerInfo.location}</p>
           </div>
           <div className="md:w-2/3 p-8">
             <h3 className="text-2xl font-semibold text-primary mb-4">My Story</h3>
