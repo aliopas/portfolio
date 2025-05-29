@@ -1,5 +1,6 @@
 
-// Mock data for the entire application
+// src/data/mockData.ts
+import type { Timestamp } from 'firebase/firestore'; // Import Timestamp
 
 export interface Project {
   id: string;
@@ -7,7 +8,7 @@ export interface Project {
   description: string;
   category: string;
   technologies: string[];
-  tags: string[]; // Ensure tags is always an array
+  tags: string[];
   imageUrl: string;
   imageHint: string;
   githubLink?: string | null;
@@ -20,7 +21,7 @@ export interface Message {
   email: string;
   subject?: string;
   message: string;
-  date: string;
+  date: Timestamp | Date | string; // Allow Firestore Timestamp, JS Date or string for display
   read?: boolean;
 }
 
@@ -34,8 +35,8 @@ export const projectsData: Project[] = [
     tags: ["E-commerce", "React", "Full-stack"],
     imageUrl: "https://placehold.co/600x400.png",
     imageHint: "online store",
-    githubLink: null, // Use null for consistency
-    liveLink: null,  // Use null for consistency
+    githubLink: null,
+    liveLink: null,
   },
   {
     id: "2",
@@ -99,6 +100,7 @@ export const projectsData: Project[] = [
   },
 ];
 
+// messagesData is now for initial structure reference, actual messages will come from Firestore
 export const messagesData: Message[] = [
   {
     id: "msg1",
@@ -106,7 +108,7 @@ export const messagesData: Message[] = [
     email: "john.doe@example.com",
     subject: "Project Inquiry",
     message: "Hello AliAlaa, I'm very impressed with your portfolio and would like to discuss a potential project. Are you available for a quick chat next week? Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    date: "2024-07-28T10:30:00Z",
+    date: "2024-07-28T10:30:00Z", // Will be Firestore Timestamp in reality
     read: false,
   },
   {
@@ -115,25 +117,7 @@ export const messagesData: Message[] = [
     email: "jane.smith@example.com",
     subject: "Collaboration Opportunity",
     message: "Hi AliAlaa, I found your work on GitHub and I'm looking for a skilled developer to collaborate on an open-source project. It's a great opportunity to build something impactful. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-    date: "2024-07-27T15:45:00Z",
-    read: true,
-  },
-  {
-    id: "msg3",
-    name: "Bob Johnson",
-    email: "bob.johnson@example.com",
-    subject: "Question about your Blog Post",
-    message: "Great article on Next.js! I had a follow-up question regarding server components. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-    date: "2024-07-26T09:12:00Z",
-    read: false,
-  },
-  {
-    id: "msg4",
-    name: "Alice Williams",
-    email: "alice.williams@example.com",
-    subject: "Feedback on Portfolio",
-    message: "Your portfolio looks fantastic! Very clean design and impressive projects. One small suggestion: maybe add a bit more detail to the project descriptions. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    date: "2024-07-25T12:00:00Z",
+    date: "2024-07-27T15:45:00Z", // Will be Firestore Timestamp in reality
     read: true,
   },
 ];

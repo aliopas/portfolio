@@ -7,37 +7,46 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Mail, MapPin, Phone, Send, Loader2 } from "lucide-react";
-import { useState } from "react";
+import { useState, type FormEvent } from "react"; // Added type FormEvent
 
 export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState<{type: 'success' | 'error', text: string} | null>(null);
 
-  // Mock form submission
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) { // Typed event
     event.preventDefault();
     setIsSubmitting(true);
     setSubmitMessage(null);
 
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    const formData = new FormData(event.currentTarget);
+    const name = formData.get('name') as string;
+    const email = formData.get('email') as string;
+    const subject = formData.get('subject') as string;
+    const message = formData.get('message') as string;
 
-    // Example: get form data
-    // const formData = new FormData(event.currentTarget);
-    // const name = formData.get('name');
-    // const email = formData.get('email');
-    // const message = formData.get('message');
-    // console.log({ name, email, message });
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, email, subject, message }),
+      });
 
-    // Mock success/error
-    const success = Math.random() > 0.2; // 80% chance of success
-    if (success) {
-      setSubmitMessage({ type: 'success', text: 'Your message has been sent successfully! I will get back to you soon.' });
-      (event.target as HTMLFormElement).reset();
-    } else {
-      setSubmitMessage({ type: 'error', text: 'Failed to send message. Please try again later.' });
+      const result = await response.json();
+
+      if (response.ok) {
+        setSubmitMessage({ type: 'success', text: result.message || 'Your message has been sent successfully! I will get back to you soon.' });
+        (event.target as HTMLFormElement).reset();
+      } else {
+        setSubmitMessage({ type: 'error', text: result.error || 'Failed to send message. Please try again later.' });
+      }
+    } catch (error) {
+      console.error('Contact form submission error:', error);
+      setSubmitMessage({ type: 'error', text: 'An unexpected error occurred. Please try again later.' });
+    } finally {
+      setIsSubmitting(false);
     }
-    setIsSubmitting(false);
   }
 
 
@@ -78,7 +87,7 @@ export default function ContactPage() {
               </div>
             </CardContent>
             <CardFooter className="border-t pt-6">
-              <Button type="submit" disabled={isSubmitting} className="w-full md:w-auto">
+              <Button type="submit" disabled={isSubmitting} className="w-full md:w-auto btn-glow btn-base-hover">
                 {isSubmitting ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -94,7 +103,7 @@ export default function ContactPage() {
             </CardFooter>
           </form>
           {submitMessage && (
-            <div className={`p-4 mt-4 rounded-md text-sm ${submitMessage.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+            <div className={`p-4 mt-4 rounded-md text-sm ${submitMessage.type === 'success' ? 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200' : 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-200'}`}>
               {submitMessage.text}
             </div>
           )}
@@ -134,7 +143,6 @@ export default function ContactPage() {
               </div>
             </div>
           </div>
-          {/* Office Hours section removed */}
         </div>
       </div>
     </div>
