@@ -5,9 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { CloudSun, Zap, Code, Brain, Users } from "lucide-react";
-import { useEffect, useState } from "react";
-import Image from "next/image";
+import { Zap, Code, Brain, Users } from "lucide-react"; // CloudSun removed
 
 // Mock data - replace with Firebase data later
 const developerInfo = {
@@ -16,7 +14,7 @@ const developerInfo = {
   bio: "Passionate about creating intuitive and performant web experiences. With a strong foundation in modern JavaScript frameworks and backend technologies, I enjoy tackling complex challenges and continuously learning new skills. My goal is to build applications that are not only functional but also delightful to use.",
   avatarUrl: "https://placehold.co/200x200.png",
   avatarHint: "developer portrait",
-  location: "San Francisco, CA", 
+  location: "San Francisco, CA",
   skills: [
     { name: "JavaScript", level: 95, icon: <Code className="h-4 w-4 text-yellow-500" /> },
     { name: "React & Next.js", level: 90, icon: <Zap className="h-4 w-4 text-sky-500" /> },
@@ -28,68 +26,10 @@ const developerInfo = {
   ],
 };
 
-interface WeatherData {
-  description: string;
-  temperature: number;
-  city: string;
-  iconUrl: string;
-}
+// WeatherData interface and related state/effects removed
 
 export default function AboutPage() {
-  const [weather, setWeather] = useState<WeatherData | null>(null);
-  const [weatherError, setWeatherError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const apiKey = process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY;
-    const locationName = developerInfo.location; // For display
-
-    // Hardcoded coordinates for San Francisco, CA as onecall API needs lat/lon
-    const lat = 37.7749;
-    const lon = -122.4194;
-
-    if (!apiKey || apiKey.includes("YOUR_OPENWEATHER_API_KEY")) {
-      const errorMessage = "OpenWeatherMap API key not configured or is placeholder. Please set NEXT_PUBLIC_OPENWEATHER_API_KEY in your .env file.";
-      setWeatherError(errorMessage);
-      console.warn(errorMessage);
-      return;
-    }
-    
-    async function fetchWeather() {
-      try {
-        // Using OpenWeatherMap One Call API 3.0
-        // Excluding minutely, hourly, daily, alerts to get mostly current weather
-        const response = await fetch(
-          `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly,daily,alerts&appid=${apiKey}&units=metric`
-        );
-        
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({ message: "Failed to parse error response from API." })); // Graceful error parsing
-          throw new Error(`OpenWeatherMap API request failed: ${response.status} ${response.statusText}. Message: ${errorData.message || 'Unknown API error'}`);
-        }
-        const data = await response.json();
-        
-        if (data && data.current && data.current.weather && data.current.weather.length > 0) {
-            setWeather({
-              description: data.current.weather[0].description,
-              temperature: Math.round(data.current.temp),
-              city: locationName, // Display the location name from devInfo
-              iconUrl: `https://openweathermap.org/img/wn/${data.current.weather[0].icon}@2x.png`,
-            });
-            setWeatherError(null);
-        } else {
-            throw new Error("OpenWeatherMap API response format unexpected for current weather.");
-        }
-      } catch (error) {
-        console.error("Failed to fetch weather:", error);
-        if (error instanceof Error) {
-           setWeatherError(`Failed to fetch weather data. ${error.message}`);
-        } else {
-           setWeatherError("An unknown error occurred while fetching weather data.");
-        }
-      }
-    }
-    fetchWeather();
-  }, []);
+  // Weather state and useEffect removed
 
   return (
     <div className="space-y-12">
@@ -111,16 +51,7 @@ export default function AboutPage() {
             </div>
             <h2 className="text-2xl font-semibold text-primary-foreground">{developerInfo.name}</h2>
             <p className="text-md text-primary-foreground/80">{developerInfo.title}</p>
-            {weather && (
-              <Badge variant="secondary" className="mt-3 bg-background/20 text-primary-foreground backdrop-blur-sm">
-                <CloudSun className="mr-2 h-4 w-4" />
-                {weather.city}: {weather.temperature}°C, {weather.description}
-                {weather.iconUrl && <Image src={weather.iconUrl} alt="weather icon" width={48} height={48} className="ml-1 inline-block" />}
-              </Badge>
-            )}
-            {weatherError && (
-               <Badge variant="destructive" className="mt-3">{weatherError}</Badge>
-            )}
+            {/* Weather display section removed */}
           </div>
           <div className="md:w-2/3 p-8">
             <h3 className="text-2xl font-semibold text-primary mb-4">My Story</h3>
