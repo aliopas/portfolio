@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Button } from "@/components/ui/button";
@@ -111,7 +112,7 @@ export default function ContactPage() {
               </div>
               <div>
                 <h3 className="font-semibold">Location</h3>
-                <p className="text-muted-foreground">San Francisco, CA, USA (Remote)</p>
+                <p className="text-muted-foreground">Cairo, Egypt</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
@@ -120,7 +121,7 @@ export default function ContactPage() {
               </div>
               <div>
                 <h3 className="font-semibold">Email</h3>
-                <a href="mailto:hello@devfolioconnect.com" className="text-muted-foreground hover:text-primary transition-colors">hello@devfolioconnect.com</a>
+                <a href="mailto:alialaa0101617720@gmail.com" className="text-muted-foreground hover:text-primary transition-colors">alialaa0101617720@gmail.com</a>
               </div>
             </div>
             <div className="flex items-start gap-3">
@@ -129,7 +130,7 @@ export default function ContactPage() {
               </div>
               <div>
                 <h3 className="font-semibold">Phone</h3>
-                <p className="text-muted-foreground">(+1) 123-456-7890 (By appointment)</p>
+                <p className="text-muted-foreground">(+20) 1023783620</p>
               </div>
             </div>
           </div>
