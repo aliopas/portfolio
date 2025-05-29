@@ -134,11 +134,7 @@ export default function ContactPage() {
               </div>
             </div>
           </div>
-          <div className="mt-8">
-             <h3 className="text-lg font-semibold text-primary mb-2">Office Hours</h3>
-             <p className="text-sm text-muted-foreground">Monday - Friday: 9:00 AM - 6:00 PM (PST)</p>
-             <p className="text-sm text-muted-foreground">Weekends: Available for urgent matters.</p>
-          </div>
+          {/* Office Hours section removed */}
         </div>
       </div>
     </div>
