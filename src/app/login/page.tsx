@@ -18,8 +18,8 @@ export default function LoginPage() {
   const router = useRouter();
 
   // Fetch admin credentials from environment variables
-  const adminEmail = process.env.NEXT_PUBLIC_ADMIN_EMAIL;
-  const adminPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD;
+  const adminEmail = process.env.ADMIN_EMAIL;
+  const adminPassword = process.env.ADMIN_PASSWORD;
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
