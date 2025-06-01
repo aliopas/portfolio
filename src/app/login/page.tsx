@@ -46,11 +46,12 @@ export default function LoginPage() {
         // Handle login errors
         setError(data.message || 'Login failed.');
       }
-    } else {
-      setError('Invalid email or password.');
-      localStorage.removeItem('isMockLoggedIn');
+    } catch (error) {
+      console.error('Login API call failed:', error);
+      setError('An error occurred during login. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   return (
@@ -85,11 +86,7 @@ export default function LoginPage() {
               />
             </div>
             {error && <p className="text-sm text-destructive">{error}</p>}
-            <div className="flex items-center justify-end text-sm">
-              <Link href="#" className="font-medium text-primary hover:underline">
-                Forgot password?
-              </Link>
-            </div>
+
           </CardContent>
           <CardFooter className="flex flex-col gap-4">
             <Button type="submit" className="w-full btn-glow" disabled={isLoading}>
