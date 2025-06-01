@@ -8,7 +8,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Mail, Eye, Trash2, Search, Inbox, CheckCircle, Filter, Loader2 } from 'lucide-react';
 import { messagesData as initialMessages, type Message } from '@/data/mockData'; // Using type from mockData for structure
-import { Badge } from '@/components/ui/badge';
 import { format, parseISO } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 import { Input } from '@/components/ui/input';
@@ -40,12 +39,32 @@ const formatDateForDialog = (dateValue: Date | string): string => {
 
 
 export default function ManageMessagesPage() {
-  const [messages, setMessages] = useState<Message[]>(initialMessages); // Use mock data
-  const [isLoading, setIsLoading] = useState(false); // Keep for potential future async ops
+  const [messages, setMessages] = useState<Message[]>([]); // Initialize with empty array
+  const [isLoading, setIsLoading] = useState(true); // Set to true initially to show loading
+  const [error, setError] = useState<string | null>(null); // State to hold error messages
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState<'all' | 'read' | 'unread'>('all');
+
+  useEffect(() => {
+    const fetchMessages = async () => {
+      try {
+        const response = await fetch('/api/messages'); // Fetch from your new API route
+        if (!response.ok) {
+          throw new Error(`Error fetching messages: ${response.statusText}`);
+        }
+        const data: Message[] = await response.json();
+        setMessages(data);
+      } catch (err) {
+        console.error('Failed to fetch messages:', err);
+        setError('Failed to load messages. Please try again.'); // Set a user-friendly error message
+      } finally {
+        setIsLoading(false); // Stop loading regardless of success or failure
+      }
+    };
+    fetchMessages();
+  }, []); // Empty dependency array means this effect runs once on mount
 
   const { toast } = useToast();
 
@@ -169,7 +188,7 @@ export default function ManageMessagesPage() {
           ) : (
             <div className="overflow-x-auto">
               <Table>
-                <TableHeader>
+                 <TableHeader>
                   <TableRow>
                     <TableHead className="w-[50px]">Status</TableHead>
                     <TableHead>Sender</TableHead>
