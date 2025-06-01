@@ -17,10 +17,6 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const router = useRouter();
 
-  // Fetch admin credentials from environment variables
-  const adminEmail = process.env.ADMIN_EMAIL;
-  const adminPassword = process.env.ADMIN_PASSWORD;
-
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsLoading(true);
@@ -29,15 +25,27 @@ export default function LoginPage() {
     // Simulate API call delay
     await new Promise(resolve => setTimeout(resolve, 1000));
 
-    if (!adminEmail || !adminPassword) {
-      setError('Admin credentials are not configured. Please contact support.');
-      setIsLoading(false);
-      return;
-    }
+    try {
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-    if (email === adminEmail && password === adminPassword) {
-      localStorage.setItem('isMockLoggedIn', 'true'); 
-      router.push('/dashboard'); 
+      const data = await response.json();
+
+      if (response.ok) {
+        // Handle successful login (e.g., set a cookie or token if using them)
+        console.log('Login successful:', data.message);
+        // For this mock login, we'll redirect
+        localStorage.setItem('isMockLoggedIn', 'true'); // Keep this for the mock example
+        router.push('/dashboard');
+      } else {
+        // Handle login errors
+        setError(data.message || 'Login failed.');
+      }
     } else {
       setError('Invalid email or password.');
       localStorage.removeItem('isMockLoggedIn');
