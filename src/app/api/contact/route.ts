@@ -1,7 +1,6 @@
 
 // src/app/api/contact/route.ts
 import { NextResponse } from 'next/server';
-// Firebase Firestore related imports like db, collection, addDoc, serverTimestamp are removed.
 
 export async function POST(request: Request) {
   try {
@@ -17,15 +16,22 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: 'Invalid email format.' }, { status: 400 });
     }
 
-    // Simulate saving the message (since Firestore is removed)
-    console.log("Simulating message save for:", { name, email, subject, message });
+    console.log("Received contact form submission:");
+    console.log("Name:", name);
+    console.log("Email:", email);
+    console.log("Subject:", subject);
+    console.log("Message:", message);
 
-    // In a real scenario without a database, you might:
-    // - Send an email notification
-    // - Log to a file (if running in a Node.js server environment, not directly applicable here for client-side form)
-    // For now, we just return success.
+    // TODO: Implement MySQL database interaction here to save the message.
+    // Example steps:
+    // 1. Establish a connection to your MySQL database using credentials from .env.
+    // 2. Prepare and execute an SQL INSERT statement to save the message data.
+    // 3. Handle any potential errors during the database operation.
+    // 4. Close the database connection.
+    
+    console.log("Simulating message save (MySQL integration pending)...");
 
-    return NextResponse.json({ message: 'Message sent successfully! (Simulated - not saved to DB)' }, { status: 201 });
+    return NextResponse.json({ message: 'Message sent successfully! (MySQL integration pending)' }, { status: 201 });
   } catch (error) {
     console.error('Error processing contact form (simulation):', error);
     let errorMessage = 'Failed to send message.';
