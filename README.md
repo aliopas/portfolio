@@ -31,6 +31,10 @@ This project utilizes a modern tech stack for a robust and performant web applic
     *   **Role:** A library of simply beautiful and consistent SVG icons.
     *   **Usage:** Provides most of the icons used throughout the application for navigation, actions, and visual cues.
 
+*   **Genkit (with Google AI):**
+    *   **Role:** An open-source framework from Google, used for building AI-powered features.
+    *   **Usage:** Integrated into the project (`src/ai/`) to power AI-driven functionalities such as the "AI Project Description Generator" and "Simple Project Code Generator" found on the `/ai-project-description` page. It utilizes Google AI models (e.g., Gemini) for generation tasks.
+
 *   **Recharts:**
     *   **Role:** A composable charting library built on React components.
     *   **Usage:** Used to display charts and graphs on the admin dashboard (e.g., content views, engagement).
@@ -78,11 +82,27 @@ Follow these steps to get the project up and running on your local machine.
 3.  **Set up Environment Variables:**
     Create a `.env` file in the root of your project by copying `.env.example` (if one exists) or by creating a new one. Add the following variables:
     ```env
-    NEXT_PUBLIC_ADMIN_EMAIL=your_admin_email@example.com
-    NEXT_PUBLIC_ADMIN_PASSWORD=your_admin_password
-    # NEXT_PUBLIC_OPENWEATHER_API_KEY=your_openweathermap_api_key (If weather feature is re-added)
+    # Admin Credentials (used for mock login and API based login)
+    ADMIN_EMAIL=your_admin_email@example.com
+    ADMIN_PASSWORD=your_admin_password
+
+    # Firebase Configuration (if connecting to Firebase services like Firestore)
+    # NEXT_PUBLIC_FIREBASE_API_KEY=
+    # NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
+    # NEXT_PUBLIC_FIREBASE_PROJECT_ID=
+    # NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
+    # NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
+    # NEXT_PUBLIC_FIREBASE_APP_ID=
+
+    # CockroachDB / PostgreSQL Connection (example placeholders)
+    # DB_HOST=
+    # DB_PORT=26257
+    # DB_USER=
+    # DB_PASSWORD=
+    # DB_DATABASE=
+    # DB_SSL_ROOT_CERT_PATH= # e.g., $env:appdata\postgresql\root.crt or path/to/your/root.crt
     ```
-    Replace the placeholder values with your actual credentials.
+    Replace the placeholder values with your actual credentials. `ADMIN_EMAIL` and `ADMIN_PASSWORD` are used by the `/api/login` route. Other variables are placeholders for potential database integrations.
 
 ### Running the Development Server
 
@@ -95,19 +115,17 @@ This will start the development server, usually on `http://localhost:9002` (as s
 
 ### Building for Production
 
-To create a production-ready static export (for platforms like GitHub Pages):
+To create a production-ready build:
 ```bash
 npm run build
 ```
-This command will generate a static version of your site in the `out` folder. The `next.config.ts` is configured with `output: 'export'` and `images: { unoptimized: true }` for this purpose.
-
-If deploying to a platform that supports Next.js server-side features (like Firebase App Hosting or Vercel), the standard `next build` command prepares the app accordingly.
+This command prepares your app for deployment. The specific output (static export vs. server deployment) depends on your `next.config.ts` settings. The current `next.config.ts` does not specify `output: 'export'`, so it will build for a Node.js server environment, suitable for platforms like Firebase App Hosting.
 
 ## Project Structure
 
 *   `src/app/`: Contains all the pages, layouts, and route-specific components (using Next.js App Router).
 *   `src/components/`: Shared UI components (e.g., layout, ShadCN UI components).
-*   `src/lib/`: Utility functions.
+*   `src/lib/`: Utility functions and Firebase configuration.
 *   `src/context/`: React Context providers (e.g., `ThemeContext`).
 *   `src/data/`: Mock data used in the application.
 *   `src/ai/`: Configuration and flows for Genkit (AI features).
@@ -119,12 +137,12 @@ If deploying to a platform that supports Next.js server-side features (like Fire
 
 ## Admin Dashboard
 
-The application includes a private admin dashboard accessible via the `/login` page. Use the admin credentials defined in your `.env` file. The dashboard allows for:
+The application includes a private admin dashboard accessible via the `/login` page. Use the admin credentials defined in your `.env` file (specifically `ADMIN_EMAIL` and `ADMIN_PASSWORD` for the `/api/login` route). The dashboard allows for:
 *   Managing portfolio projects (view, add, edit, delete - currently using mock data).
-*   Viewing messages (from mock data).
+*   Viewing messages (from mock data, as database integration is not fully active by default).
 *   Account settings.
 
 ## Notes
-
-*   The project is configured for static export, making it suitable for hosting on platforms like GitHub Pages. If `basePath` is needed for GitHub Pages (e.g., `your-username.github.io/repository-name/`), update it in `next.config.ts`.
-*   The current admin login functionality uses `NEXT_PUBLIC_` environment variables, which are accessible in client-side code. For enhanced security in a production environment with sensitive data, authentication should be handled server-side.
+*   The current admin login functionality uses environment variables `ADMIN_EMAIL` and `ADMIN_PASSWORD` checked on the server-side via an API route.
+*   Contact form messages are currently logged to the console by the API route and displayed from mock data on the dashboard. Full database integration (e.g., CockroachDB/MySQL/Firestore) needs to be completed by the developer in `src/app/api/contact/route.ts` and `src/app/dashboard/messages/page.tsx`.
+```
