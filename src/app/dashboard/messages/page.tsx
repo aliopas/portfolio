@@ -1,109 +1,180 @@
 
 'use client';
 
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from '@/components/ui/dialog';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Mail, Eye, Trash2, Search, Inbox, CheckCircle, Filter, Loader2 } from 'lucide-react';
-import { messagesData as initialMessages, type Message } from '@/data/mockData'; // Using type from mockData for structure
+import { Mail, Eye, Trash2, Search, Inbox, CheckCircle, Filter, Loader2, AlertCircle } from 'lucide-react';
+import { type Message } from '@/data/mockData'; 
 import { format, parseISO } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Badge } from '@/components/ui/badge';
 import { cn } from "@/lib/utils";
-// Firebase Firestore imports are removed
+import { Alert, AlertDescription } from '@/components/ui/alert';
+
 
 // Helper function to format date from various types
-const formatDate = (dateValue: Date | string): string => {
-  if (typeof dateValue === 'string') {
-    return format(parseISO(dateValue), "MMM d, yyyy, HH:mm");
-  }
-  if (dateValue instanceof Date) {
-    return format(dateValue, "MMM d, yyyy, HH:mm");
+const formatDate = (dateValue: Date | string | undefined): string => {
+  if (!dateValue) return 'No Date';
+  try {
+    if (typeof dateValue === 'string') {
+      return format(parseISO(dateValue), "MMM d, yyyy, HH:mm");
+    }
+    if (dateValue instanceof Date) {
+      return format(dateValue, "MMM d, yyyy, HH:mm");
+    }
+  } catch (error) {
+    console.warn("Error formatting date:", dateValue, error);
+    return 'Invalid Date';
   }
   return 'Invalid Date';
 };
 
 // Helper function to format date for dialog
-const formatDateForDialog = (dateValue: Date | string): string => {
-    if (typeof dateValue === 'string') {
-      return format(parseISO(dateValue), "PPPp");
-    }
-    if (dateValue instanceof Date) {
-      return format(dateValue, "PPPp");
+const formatDateForDialog = (dateValue: Date | string | undefined): string => {
+    if (!dateValue) return 'No Date';
+    try {
+      if (typeof dateValue === 'string') {
+        return format(parseISO(dateValue), "PPPp");
+      }
+      if (dateValue instanceof Date) {
+        return format(dateValue, "PPPp");
+      }
+    } catch (error) {
+      console.warn("Error formatting date for dialog:", dateValue, error);
+      return 'Invalid Date';
     }
     return 'Invalid Date';
   };
 
 
 export default function ManageMessagesPage() {
-  const [messages, setMessages] = useState<Message[]>([]); // Initialize with empty array
-  const [isLoading, setIsLoading] = useState(true); // Set to true initially to show loading
-  const [error, setError] = useState<string | null>(null); // State to hold error messages
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState<'all' | 'read' | 'unread'>('all');
 
-  useEffect(() => {
-    const fetchMessages = async () => {
-      try {
-        const response = await fetch('/api/messages'); // Fetch from your new API route
-        if (!response.ok) {
-          throw new Error(`Error fetching messages: ${response.statusText}`);
-        }
-        const data: Message[] = await response.json();
-        setMessages(data);
-      } catch (err) {
-        console.error('Failed to fetch messages:', err);
-        setError('Failed to load messages. Please try again.'); // Set a user-friendly error message
-      } finally {
-        setIsLoading(false); // Stop loading regardless of success or failure
-      }
-    };
-    fetchMessages();
-  }, []); // Empty dependency array means this effect runs once on mount
-
   const { toast } = useToast();
 
-  // useEffect for fetching from Firestore is removed
+  const fetchMessages = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const response = await fetch('/api/messages');
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || `Error fetching messages: ${response.statusText}`);
+      }
+      const data: Message[] = await response.json();
+      setMessages(data.map(msg => ({
+        ...msg,
+        // Ensure date is a string or Date object for consistency, parseISO will handle strings
+        date: typeof msg.date === 'string' ? parseISO(msg.date) : msg.date, 
+      })));
+    } catch (err) {
+      console.error('Failed to fetch messages:', err);
+      setError(err instanceof Error ? err.message : 'Failed to load messages. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
-  const handleViewMessage = (messageToView: Message) => {
+  useEffect(() => {
+    fetchMessages();
+  }, [fetchMessages]);
+
+
+  const handleViewMessage = async (messageToView: Message) => {
     let messageForDialog = { ...messageToView };
 
     if (!messageToView.read) {
-      messageForDialog.read = true; // Update for dialog
-      // Update in local state
-      setMessages(prevMessages =>
-        prevMessages.map(msg =>
-          msg.id === messageToView.id ? { ...msg, read: true } : msg
-        )
-      );
+      try {
+        // Optimistically update UI
+        setMessages(prevMessages =>
+          prevMessages.map(msg =>
+            msg.id === messageToView.id ? { ...msg, read: true } : msg
+          )
+        );
+        messageForDialog.read = true;
+
+        const response = await fetch(`/api/messages/${messageToView.id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ read: true }),
+        });
+
+        if (!response.ok) {
+          // Revert optimistic update on failure
+          setMessages(prevMessages =>
+            prevMessages.map(msg =>
+              msg.id === messageToView.id ? { ...msg, read: false } : msg
+            )
+          );
+          messageForDialog.read = false; // Revert for dialog as well
+          const errorResult = await response.json();
+          toast({ title: "Error", description: errorResult.error || "Failed to mark as read.", variant: "destructive" });
+        } else {
+           // toast({ title: "Message Updated", description: "Marked as read." }); // Optional success toast
+        }
+      } catch (e) {
+        // Revert optimistic update on network error
+        setMessages(prevMessages =>
+          prevMessages.map(msg =>
+            msg.id === messageToView.id ? { ...msg, read: false } : msg
+          )
+        );
+        messageForDialog.read = false;
+        toast({ title: "Error", description: "An error occurred.", variant: "destructive" });
+      }
     }
     setSelectedMessage(messageForDialog);
     setIsViewDialogOpen(true);
   };
+  
+  const handleDeleteMessage = async (messageId: string) => {
+    const originalMessages = [...messages];
+    // Optimistically update UI
+    setMessages(prevMessages => prevMessages.filter(msg => msg.id !== messageId));
 
-  const handleDeleteMessage = (messageId: string) => {
-    setMessages(messages.filter(msg => msg.id !== messageId));
-    toast({
-      title: "Message Deleted",
-      description: "The message has been removed (from local view).",
-    });
+    try {
+      const response = await fetch(`/api/messages/${messageId}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        // Revert optimistic update
+        setMessages(originalMessages);
+        const errorResult = await response.json();
+        toast({ title: "Error", description: errorResult.error || "Failed to delete message.", variant: "destructive" });
+      } else {
+        toast({ title: "Message Deleted", description: "The message has been removed." });
+      }
+    } catch (e) {
+      setMessages(originalMessages);
+      toast({ title: "Error", description: "An error occurred while deleting.", variant: "destructive" });
+    }
+
     if (selectedMessage && selectedMessage.id === messageId) {
       setIsViewDialogOpen(false);
       setSelectedMessage(null);
     }
   };
   
-  const handleToggleReadStatus = (messageId: string) => {
+  const handleToggleReadStatus = async (messageId: string) => {
     const messageToUpdate = messages.find(msg => msg.id === messageId);
     if (!messageToUpdate) return;
 
     const newReadState = !messageToUpdate.read;
+    const originalMessages = [...messages];
     
+    // Optimistic UI update
     setMessages(prevMessages =>
       prevMessages.map(msg =>
         msg.id === messageId ? { ...msg, read: newReadState } : msg
@@ -112,10 +183,31 @@ export default function ManageMessagesPage() {
     if (selectedMessage && selectedMessage.id === messageId) {
       setSelectedMessage(prev => prev ? {...prev, read: newReadState} : null);
     }
-    toast({
-      title: `Message Marked as ${newReadState ? 'Read' : 'Unread'}`,
-      description: "The message status has been updated (in local view).",
-    });
+
+    try {
+      const response = await fetch(`/api/messages/${messageId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ read: newReadState }),
+      });
+
+      if (!response.ok) {
+        setMessages(originalMessages); // Revert
+        if (selectedMessage && selectedMessage.id === messageId) {
+          setSelectedMessage(prev => prev ? {...prev, read: !newReadState} : null);
+        }
+        const errorResult = await response.json();
+        toast({ title: "Error", description: errorResult.error || `Failed to mark as ${newReadState ? 'read' : 'unread'}.`, variant: "destructive" });
+      } else {
+        toast({ title: `Message Marked as ${newReadState ? 'Read' : 'Unread'}` });
+      }
+    } catch (e) {
+      setMessages(originalMessages); // Revert
+      if (selectedMessage && selectedMessage.id === messageId) {
+         setSelectedMessage(prev => prev ? {...prev, read: !newReadState} : null);
+      }
+      toast({ title: "Error", description: "An error occurred.", variant: "destructive" });
+    }
   };
 
   const filteredMessages = useMemo(() => {
@@ -144,7 +236,9 @@ export default function ManageMessagesPage() {
           <div>
             <CardTitle className="text-2xl">View Messages</CardTitle>
             <CardDescription>
-              Review messages sent through your contact form. {unreadCount > 0 ? `${unreadCount} unread.` : 'All messages read.'} (Using Mock Data)
+              Review messages sent through your contact form. 
+              {!isLoading && !error && (unreadCount > 0 ? `${unreadCount} unread.` : 'All messages read.')}
+              {error && " Error loading messages."}
             </CardDescription>
           </div>
         </CardHeader>
@@ -180,11 +274,16 @@ export default function ManageMessagesPage() {
           </div>
         </CardHeader>
         <CardContent>
-          {isLoading ? ( // Kept for UI consistency, though not actively fetching from DB now
+          {isLoading ? (
             <div className="flex justify-center items-center h-64">
               <Loader2 className="h-8 w-8 animate-spin text-primary" />
               <p className="ml-2">Loading messages...</p>
             </div>
+          ) : error ? (
+             <Alert variant="destructive" className="my-4">
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription>{error}</AlertDescription>
+            </Alert>
           ) : (
             <div className="overflow-x-auto">
               <Table>
@@ -202,7 +301,7 @@ export default function ManageMessagesPage() {
                     <TableRow key={message.id} className={cn(!message.read && "bg-primary/5 font-medium")}>
                       <TableCell>
                         {!message.read ? (
-                          <Badge variant="default">New</Badge> 
+                          <Badge variant="default" className="bg-accent text-accent-foreground">New</Badge> 
                         ) : (
                           <Badge variant="outline">Read</Badge>
                         )}
@@ -230,7 +329,7 @@ export default function ManageMessagesPage() {
                   )) : (
                      <TableRow>
                       <TableCell colSpan={5} className="h-24 text-center">
-                        {messages.length === 0 && !isLoading ? "No messages yet (using mock data)." : "No messages match your current filter."}
+                        {messages.length === 0 && !isLoading ? "No messages received yet." : "No messages match your current filter."}
                       </TableCell>
                     </TableRow>
                   )}
@@ -239,7 +338,7 @@ export default function ManageMessagesPage() {
             </div>
           )}
         </CardContent>
-        {filteredMessages.length > 10 && (
+        {!isLoading && !error && filteredMessages.length > 10 && (
             <CardFooter className="justify-center border-t pt-4">
                 <p className="text-xs text-muted-foreground">Showing {filteredMessages.length} of {messages.length} messages</p>
             </CardFooter>
@@ -264,6 +363,8 @@ export default function ManageMessagesPage() {
             <DialogFooter className="mt-auto">
               <Button variant="outline" onClick={() => {
                 if (selectedMessage) handleToggleReadStatus(selectedMessage.id);
+                // Optionally close dialog or keep it open
+                // setIsViewDialogOpen(false); 
               }}>
                 {selectedMessage.read ? "Mark as Unread" : "Mark as Read"}
               </Button>

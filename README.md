@@ -31,10 +31,6 @@ This project utilizes a modern tech stack for a robust and performant web applic
     *   **Role:** A library of simply beautiful and consistent SVG icons.
     *   **Usage:** Provides most of the icons used throughout the application for navigation, actions, and visual cues.
 
-*   **Genkit (with Google AI):**
-    *   **Role:** An open-source framework from Google, used for building AI-powered features.
-    *   **Usage:** Integrated into the project (`src/ai/`) to power AI-driven functionalities such as the "AI Project Description Generator" and "Simple Project Code Generator" found on the `/ai-project-description` page. It utilizes Google AI models (e.g., Gemini) for generation tasks.
-
 *   **Recharts:**
     *   **Role:** A composable charting library built on React components.
     *   **Usage:** Used to display charts and graphs on the admin dashboard (e.g., content views, engagement).
@@ -86,23 +82,15 @@ Follow these steps to get the project up and running on your local machine.
     ADMIN_EMAIL=your_admin_email@example.com
     ADMIN_PASSWORD=your_admin_password
 
-    # Firebase Configuration (if connecting to Firebase services like Firestore)
-    # NEXT_PUBLIC_FIREBASE_API_KEY=
-    # NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
-    # NEXT_PUBLIC_FIREBASE_PROJECT_ID=
-    # NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
-    # NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
-    # NEXT_PUBLIC_FIREBASE_APP_ID=
-
-    # CockroachDB / PostgreSQL Connection (example placeholders)
-    # DB_HOST=
-    # DB_PORT=26257
-    # DB_USER=
-    # DB_PASSWORD=
-    # DB_DATABASE=
-    # DB_SSL_ROOT_CERT_PATH= # e.g., $env:appdata\postgresql\root.crt or path/to/your/root.crt
+    # CockroachDB / PostgreSQL Connection
+    DB_HOST=
+    DB_PORT=26257
+    DB_USER=
+    DB_PASSWORD=
+    DB_DATABASE=
+    DB_SSL_ROOT_CERT_PATH= # e.g., $env:appdata\postgresql\root.crt or path/to/your/root.crt
     ```
-    Replace the placeholder values with your actual credentials. `ADMIN_EMAIL` and `ADMIN_PASSWORD` are used by the `/api/login` route. Other variables are placeholders for potential database integrations.
+    Replace the placeholder values with your actual credentials. `ADMIN_EMAIL` and `ADMIN_PASSWORD` are used by the `/api/login` route. Other variables are for database connection.
 
 ### Running the Development Server
 
@@ -125,10 +113,9 @@ This command prepares your app for deployment. The specific output (static expor
 
 *   `src/app/`: Contains all the pages, layouts, and route-specific components (using Next.js App Router).
 *   `src/components/`: Shared UI components (e.g., layout, ShadCN UI components).
-*   `src/lib/`: Utility functions and Firebase configuration.
+*   `src/lib/`: Utility functions.
 *   `src/context/`: React Context providers (e.g., `ThemeContext`).
 *   `src/data/`: Mock data used in the application.
-*   `src/ai/`: Configuration and flows for Genkit (AI features).
 *   `public/`: Static assets like images (though `next/image` is preferred for optimization).
 *   `next.config.ts`: Configuration file for Next.js.
 *   `tailwind.config.ts`: Configuration file for Tailwind CSS.
@@ -144,5 +131,5 @@ The application includes a private admin dashboard accessible via the `/login` p
 
 ## Notes
 *   The current admin login functionality uses environment variables `ADMIN_EMAIL` and `ADMIN_PASSWORD` checked on the server-side via an API route.
-*   Contact form messages are currently logged to the console by the API route and displayed from mock data on the dashboard. Full database integration (e.g., CockroachDB/MySQL/Firestore) needs to be completed by the developer in `src/app/api/contact/route.ts` and `src/app/dashboard/messages/page.tsx`.
+*   Contact form messages are currently logged to the console by the API route and displayed from mock data on the dashboard. Full database integration (e.g., CockroachDB) needs to be completed by the developer in `src/app/api/contact/route.ts` and `src/app/api/messages/*` routes, and `src/app/dashboard/messages/page.tsx`.
 ```
