@@ -66,7 +66,7 @@ export default function AboutPage() {
       <Card className="shadow-lg overflow-hidden">
         {/* Removed md:flex from this div to stack children vertically */}
         <div>
-          {/* This section (Avatar, Name, Title, Location) will now be on top */}
+          {/* This section (Avatar, Name, Title, Location, and Image) will now be on top */}
           <div className="bg-gradient-to-br from-primary via-secondary to-accent p-8 flex flex-col items-center justify-center text-center"> {/* Removed md:w-1/3 */}
             <div className="avatar-animated-border p-1 rounded-full mb-4 inline-block">
               <Avatar className="w-32 h-32 shadow-xl">
@@ -78,6 +78,7 @@ export default function AboutPage() {
             <p className="text-md text-primary-foreground/80">{developerInfo.title}</p>
             <p className="text-sm text-primary-foreground/70 mt-2">{developerInfo.location}</p>
           </div>
+          <img src="https://placehold.co/600x400.png" alt="Developer image" width="600" height="400" className="rounded-md object-cover w-full md:w-1/3 aspect-video"/>
           {/* This section (My Story/Bio) will now be below the Avatar section */}
           <div className="p-8"> {/* Removed md:w-2/3 */}
             <h3 className="text-2xl font-semibold text-primary mb-4">My Story</h3>
