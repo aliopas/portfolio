@@ -316,7 +316,7 @@ export default function ManageMessagesPage() {
                       </TableCell>
                       <TableCell>{message.subject || <span className="text-muted-foreground italic">No Subject</span>}</TableCell>
                       <TableCell className="text-xs">{formatDate(
-                        message.createdAtFormatted || message.createdAt || (message.date && typeof message.date === 'object' && 'toDate' in message.date && typeof (message.date as any).toDate === 'function'
+                        message.createdAt || (message.date && typeof message.date === 'object' && 'toDate' in message.date && typeof (message.date as any).toDate === 'function'
                           ? (message.date as any).toDate()
                           : message.date)
                       )}</TableCell>
@@ -362,7 +362,7 @@ export default function ManageMessagesPage() {
                 From: {selectedMessage.name} ({selectedMessage.email})
                 <br />
                 Received: {formatDateForDialog(
-                  selectedMessage?.createdAtFormatted || selectedMessage?.createdAt || (selectedMessage?.date && typeof selectedMessage.date === 'object' && 'toDate' in selectedMessage.date && typeof (selectedMessage.date as any).toDate === 'function'
+                  selectedMessage?.createdAt || (selectedMessage?.date && typeof selectedMessage.date === 'object' && 'toDate' in selectedMessage.date && typeof (selectedMessage.date as any).toDate === 'function'
                     ? (selectedMessage.date as any).toDate()
                     : selectedMessage.date)
                 )}

@@ -93,8 +93,7 @@ export async function POST(request: Request) {
       email,
       message,
       subject: subject || '',
-      createdAt: now.toISOString(),
-      createdAtFormatted: now.toLocaleString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+      createdAt: now.toISOString()
     });
     console.log('Message saved with id:', docRef.id);
     return NextResponse.json({ success: true, id: docRef.id });

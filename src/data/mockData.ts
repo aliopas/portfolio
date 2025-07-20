@@ -21,7 +21,8 @@ export interface Message {
   email: string;
   subject?: string;
   message: string;
-  date: Timestamp | Date | string; // Allow Firestore Timestamp, JS Date or string for display
+  date: Timestamp | Date | string;
+  createdAt?: string | Date;
   read?: boolean;
 }
 
