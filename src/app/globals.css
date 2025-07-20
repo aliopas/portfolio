@@ -1,0 +1,264 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Light Mode - Updated Color Scheme */
+    --background: 210 30% 96%; /* #F0F4F8 - New light grayish blue background */
+    --foreground: 215 28% 21%; /* #1F2937 */
+
+    --card: 0 0% 100%;
+    --card-foreground: 215 28% 21%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 215 28% 21%;
+
+    --primary: 217 91% 60%; /* #3B82F6 */
+    --primary-foreground: 0 0% 98%; /* White text on primary */
+
+    --secondary: 217 94% 68%; /* #60A5FA - used as a lighter primary variant or secondary action */
+    --secondary-foreground: 215 28% 21%; /* Dark text on light secondary */
+
+    --muted: 220 9% 85%;
+    --muted-foreground: 222 20% 40%;
+
+    --accent: 217 91% 60%; /* #3B82F6 (Same as primary for light mode) */
+    --accent-foreground: 0 0% 98%; /* White text on accent */
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 220 13% 88%;
+    --input: 220 13% 88%;
+    --ring: 217 91% 60%; /* Primary color for focus rings */
+
+    --radius: 0.5rem;
+
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+
+    --sidebar-background: 220 13% 92%;
+    --sidebar-foreground: 240 10% 3.9%;
+    --sidebar-primary: 217 91% 55%; /* Adjusted primary for sidebar */
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 220 13% 85%;
+    --sidebar-accent-foreground: 240 10% 3.9%;
+    --sidebar-border: 220 13% 80%;
+    --sidebar-ring: 217 91% 55%;
+
+    /* Glow Animation Colors - Light Mode */
+    --btn-glow-color: hsl(217, 94%, 75%); /* Lighter version of #3B82F6 for glow */
+    --bg-glow-start-color: hsl(217, 80%, 93%); /* #DBEAFE */
+    --bg-glow-end-color: hsl(210, 30%, 96%);   /* #F0F4F8 - Matches new background */
+    --bg-glow-accent-color: hsl(217, 91%, 70%); /* Accent for glow based on primary */
+  }
+
+  .dark {
+    /* Dark Mode - Updated Color Scheme */
+    --background: 215 28% 21%; /* #1F2937 */
+    --foreground: 210 17% 98%; /* #F9FAFB */
+
+    --card: 215 28% 17%; /* Darker than background for cards */
+    --card-foreground: 210 17% 98%;
+
+    --popover: 215 28% 15%;
+    --popover-foreground: 210 17% 98%;
+
+    --primary: 217 91% 60%; /* #3B82F6 - consistent for primary actions */
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 217 94% 68%; /* #60A5FA - consistent for secondary actions */
+    --secondary-foreground: 215 28% 17%; /* Dark text on light secondary */
+
+    --muted: 222 47% 25%;
+    --muted-foreground: 220 10% 60%;
+
+    --accent: 217 94% 68%; /* #60A5FA (Dark mode accent) */
+    --accent-foreground: 215 28% 17%; /* Dark text on light accent */
+
+    --destructive: 0 72.2% 50.6%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 222 47% 25%;
+    --input: 222 47% 25%;
+    --ring: 217 94% 68%; /* Accent color for focus rings in dark */
+
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+
+    --sidebar-background: 240 10% 5.9%;
+    --sidebar-foreground: 220 13% 95%;
+    --sidebar-primary: 217 91% 55%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 5% 14.9%;
+    --sidebar-accent-foreground: 220 13% 95%;
+    --sidebar-border: 240 5% 10%;
+    --sidebar-ring: 217 91% 55%;
+
+    /* Glow Animation Colors - Dark Mode */
+    --btn-glow-color: hsl(217, 94%, 80%); /* Lighter blue #93C5FD */
+    --bg-glow-start-color: hsl(222, 47%, 15%); /* #1E3A8A */
+    --bg-glow-end-color: hsl(215, 28%, 21%);   /* #1F2937 */
+    --bg-glow-accent-color: hsl(217, 94%, 68%); /* Glowing blue accent #60A5FA */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-roboto text-base leading-relaxed; /* Default 16px, line-height 1.5 approx */
+    position: relative;
+  }
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    background: radial-gradient(ellipse at center, var(--bg-glow-start-color) 0%, var(--bg-glow-accent-color) 30%, var(--bg-glow-end-color) 70%);
+    animation: pulse-background 6s infinite ease-in-out alternate;
+  }
+  .dark body::before {
+     background: radial-gradient(ellipse at center, var(--bg-glow-start-color) 0%, var(--bg-glow-accent-color) 30%, var(--bg-glow-end-color) 70%);
+     animation: pulse-background-dark 6s infinite ease-in-out alternate;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading font-semibold;
+  }
+  h1 { @apply text-3xl md:text-4xl; }
+  h2 { @apply text-2xl md:text-3xl; }
+  h3 { @apply text-xl md:text-2xl; }
+
+  /* Button base styles for hover opacity */
+  .btn-base-hover {
+    @apply transition-opacity duration-300 hover:opacity-90;
+  }
+}
+
+@layer components {
+  .btn-glow {
+    @apply relative overflow-hidden;
+    color: hsl(var(--foreground)) !important; /* Ensures text is always foreground color */
+  }
+  .btn-glow svg {
+    color: currentColor !important; /* Ensures SVGs inherit the forced color */
+  }
+   .btn-glow > span { /* Target direct span children for text color */
+    color: hsl(var(--foreground)) !important; /* Ensures spans also get the forced color */
+  }
+   /* Ensure other direct text nodes or nested elements also get the color if needed */
+  .btn-glow > :not(svg):not(span.sr-only) {
+    color: hsl(var(--foreground)) !important;
+  }
+
+
+  .btn-glow::before { /* Rotating conic gradient - must be behind ::after and content */
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(
+      transparent,
+      transparent,
+      var(--btn-glow-color),
+      transparent,
+      transparent
+    );
+    animation: rotate-glow 3s linear infinite;
+    z-index: -2; /* Behind ::after and content */
+  }
+  .btn-glow::after { /* Solid background mimic - must be behind content */
+    content: "";
+    position: absolute;
+    inset: 2px; /* Controls the "border" thickness of the glow effect */
+    background: hsl(var(--background));
+    @apply rounded-md; /* Use Tailwind's rounded-md which matches button's default */
+    z-index: -1; /* Behind content, on top of ::before */
+  }
+
+  /* Ensure button content (text, icons) is on top of pseudo-elements */
+  .btn-glow > :not(span.sr-only):not(svg ~ span):not(svg):not(div) { /* Added :not(div) */
+    @apply relative z-10;
+  }
+  /* Explicitly target common button content elements */
+  .btn-glow > span, .btn-glow > svg, .btn-glow > div {
+    @apply relative z-10;
+  }
+
+
+  .btn-glow:hover::before {
+    animation-duration: 1s;
+    filter: brightness(1.2);
+  }
+
+  .avatar-animated-border {
+    @apply rounded-full relative p-1 inline-block; /* p-1 makes a 4px border (0.25rem) */
+  }
+
+  .avatar-animated-border::before {
+    content: "";
+    position: absolute;
+    inset: 0; /* Cover the entire padded area of the wrapper */
+    border-radius: inherit; /* Match parent's rounding */
+    background: conic-gradient(
+      from 180deg at 50% 50%,
+      hsl(var(--accent)),
+      hsl(var(--primary)),
+      hsl(var(--secondary)),
+      hsl(var(--accent))
+    );
+    animation: rotate-glow 3s linear infinite;
+    z-index: 0; /* Gradient layer is behind the Avatar content */
+  }
+
+  /* ShadCN Avatar root is typically a span with data-radix-avatar-root */
+  .avatar-animated-border > span[data-radix-avatar-root] {
+    @apply relative z-10 block; /* Avatar content (image/fallback) sits on top */
+                                /* Its own background (or image) will cover the gradient's center */
+  }
+}
+
+@keyframes rotate-glow {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse-background {
+  0% {
+    opacity: 0.7; /* Start slightly more visible */
+    background: radial-gradient(ellipse at center, hsl(var(--bg-glow-start-color)) 0%, hsl(var(--bg-glow-accent-color)) 25%, hsl(var(--bg-glow-end-color)) 70%);
+  }
+  100% {
+    opacity: 1; /* End fully visible (or slightly less if preferred) */
+    background: radial-gradient(ellipse at center, hsl(var(--bg-glow-start-color)) 0%, hsl(var(--bg-glow-accent-color)) 45%, hsl(var(--bg-glow-end-color)) 70%);
+  }
+}
+@keyframes pulse-background-dark {
+  0% {
+    opacity: 0.6;
+    background: radial-gradient(ellipse at center, hsl(var(--bg-glow-start-color)) 0%, hsl(var(--bg-glow-accent-color)) 25%, hsl(var(--bg-glow-end-color)) 70%);
+  }
+  100% {
+    opacity: 0.9;
+     background: radial-gradient(ellipse at center, hsl(var(--bg-glow-start-color)) 0%, hsl(var(--bg-glow-accent-color)) 45%, hsl(var(--bg-glow-end-color)) 70%);
+  }
+}
