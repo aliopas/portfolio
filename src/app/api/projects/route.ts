@@ -1,9 +1,17 @@
 import { NextResponse } from 'next/server';
-import { adminDb } from '@/lib/firebase-admin';
 
 // جلب جميع المشاريع
 export async function GET() {
   try {
+    // Check if Firebase is properly configured
+    const adminModule = await import('@/lib/firebase-admin');
+    const adminDb = adminModule.adminDb as any;
+    
+    if (!adminDb) {
+      console.warn('Firebase not configured. Returning empty projects list.');
+      return NextResponse.json([]);
+    }
+
     const snapshot = await adminDb.collection('projects')
       .orderBy('createdAt', 'desc')
       .get();
@@ -16,18 +24,27 @@ export async function GET() {
     return NextResponse.json(projects);
   } catch (error) {
     console.error('Error fetching projects:', error);
-    return NextResponse.json({ error: 'حدث خطأ أثناء جلب المشاريع' }, { status: 500 });
+    // Return empty array on error instead of error response
+    // This allows the frontend to show empty state gracefully
+    return NextResponse.json([]);
   }
 }
 
 // إضافة مشروع جديد
 export async function POST(request: Request) {
   try {
+    const adminModule = await import('@/lib/firebase-admin');
+    const adminDb = adminModule.adminDb as any;
+    
+    if (!adminDb) {
+      return NextResponse.json({ error: 'Firebase not configured' }, { status: 503 });
+    }
+
     const body = await request.json();
     const { title, description, category, technologies, tags, imageUrl, imageHint, githubLink, liveLink } = body;
 
     if (!title || !category) {
-      return NextResponse.json({ error: 'العنوان والتصنيف مطلوبان' }, { status: 400 });
+      return NextResponse.json({ error: 'Title and category are required' }, { status: 400 });
     }
 
     const docRef = await adminDb.collection('projects').add({
@@ -46,6 +63,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: true, id: docRef.id });
   } catch (error) {
     console.error('Error saving project:', error);
-    return NextResponse.json({ error: 'حدث خطأ أثناء حفظ المشروع' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to save project' }, { status: 500 });
   }
 }

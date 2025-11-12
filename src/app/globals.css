@@ -262,3 +262,29 @@
      background: radial-gradient(ellipse at center, hsl(var(--bg-glow-start-color)) 0%, hsl(var(--bg-glow-accent-color)) 45%, hsl(var(--bg-glow-end-color)) 70%);
   }
 }
+
+/* Fix autofill styling in dark mode and light mode */
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px hsl(var(--background)) inset !important;
+  -webkit-text-fill-color: hsl(var(--foreground)) !important;
+  caret-color: hsl(var(--foreground)) !important;
+  border-color: hsl(var(--input)) !important;
+}
+
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px hsl(var(--background)) inset !important;
+  -webkit-text-fill-color: hsl(var(--foreground)) !important;
+  caret-color: hsl(var(--foreground)) !important;
+}
+
+input:-webkit-autofill::first-line {
+  color: hsl(var(--foreground)) !important;
+}
+
+/* Fix button autofill if needed */
+button:-webkit-autofill {
+  -webkit-box-shadow: none !important;
+  background-color: hsl(var(--background)) !important;
+  color: hsl(var(--foreground)) !important;
+}
+

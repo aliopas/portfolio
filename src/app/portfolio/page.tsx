@@ -4,16 +4,19 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, Filter } from "lucide-react";
+import { ArrowRight, Filter, AlertCircle } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { useEffect } from "react";
+import { EmptyState } from "@/components/empty-state";
 
 export default function PortfolioPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [projects, setProjects] = useState<any[]>([]);
   const [categories, setCategories] = useState<string[]>(["All"]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetch('/api/projects')
@@ -22,7 +25,14 @@ export default function PortfolioPage() {
         setProjects(Array.isArray(data) ? data : []);
         const cats = ["All", ...new Set(data.map((p: any) => String(p.category)))];
         setCategories(cats as string[]);
-      });
+        setError(null);
+      })
+      .catch(err => {
+        console.error('Error fetching projects:', err);
+        setError('Failed to load projects');
+        setProjects([]);
+      })
+      .finally(() => setIsLoading(false));
   }, []);
 
   const filteredProjects = projects.filter(project =>
@@ -108,10 +118,39 @@ export default function PortfolioPage() {
             </Card>
           ))}
         </div>
-      ) : (
-        <div className="text-center py-10 text-muted-foreground">
-          <p>No projects found for the selected category.</p>
+      ) : isLoading ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <Card key={i} className="overflow-hidden animate-pulse">
+              <div className="h-40 bg-muted"></div>
+              <div className="p-6 space-y-3">
+                <div className="h-6 bg-muted rounded w-3/4"></div>
+                <div className="h-4 bg-muted rounded w-full"></div>
+                <div className="h-4 bg-muted rounded w-5/6"></div>
+              </div>
+            </Card>
+          ))}
         </div>
+      ) : error ? (
+        <EmptyState 
+          icon={<AlertCircle className="h-16 w-16 text-red-500" />}
+          title="Unable to Load Projects"
+          description={error}
+          action={
+            <Button 
+              onClick={() => window.location.reload()}
+              variant="outline"
+            >
+              Try Again
+            </Button>
+          }
+        />
+      ) : (
+        <EmptyState 
+          icon={<AlertCircle className="h-16 w-16 text-yellow-500" />}
+          title="No Projects Found"
+          description="No projects match the selected category. Try a different filter."
+        />
       )}
     </div>
   );

@@ -7,16 +7,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Mail, MapPin, Phone, Send, Loader2 } from "lucide-react";
-import { useState, type FormEvent } from "react"; // Added type FormEvent
+import { useState, type FormEvent } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 export default function ContactPage() {
+  const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitMessage, setSubmitMessage] = useState<{type: 'success' | 'error', text: string} | null>(null);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) { // Typed event
     event.preventDefault();
     setIsSubmitting(true);
-    setSubmitMessage(null);
 
     const formData = new FormData(event.currentTarget);
     const name = formData.get('name') as string;
@@ -36,14 +36,26 @@ export default function ContactPage() {
       const result = await response.json();
 
       if (response.ok) {
-        setSubmitMessage({ type: 'success', text: result.message || 'Your message has been sent successfully! I will get back to you soon.' });
+        toast({
+          title: "Success!",
+          description: result.message || 'Your message has been sent successfully! I will get back to you soon.',
+          variant: "default",
+        });
         (event.target as HTMLFormElement).reset();
       } else {
-        setSubmitMessage({ type: 'error', text: result.error || 'Failed to send message. Please try again later.' });
+        toast({
+          title: "Error",
+          description: result.error || 'Failed to send message. Please try again later.',
+          variant: "destructive",
+        });
       }
     } catch (error) {
       console.error('Contact form submission error:', error);
-      setSubmitMessage({ type: 'error', text: 'An unexpected error occurred. Please try again later.' });
+      toast({
+        title: "Error",
+        description: 'An unexpected error occurred. Please try again later.',
+        variant: "destructive",
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -102,11 +114,6 @@ export default function ContactPage() {
               </Button>
             </CardFooter>
           </form>
-          {submitMessage && (
-            <div className={`p-4 mt-4 rounded-md text-sm ${submitMessage.type === 'success' ? 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200' : 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-200'}`}>
-              {submitMessage.text}
-            </div>
-          )}
         </Card>
 
         <div className="space-y-6 pt-8 md:pt-0">
@@ -130,7 +137,7 @@ export default function ContactPage() {
               </div>
               <div>
                 <h3 className="font-semibold">Email</h3>
-                <a href="mailto:alialaa0101617720@gmail.com" className="text-muted-foreground hover:text-primary transition-colors">alialaa0101617720@gmail.com</a>
+                <a href="mailto:ali.alaaeldin.2025@gmail.com" className="text-muted-foreground hover:text-primary transition-colors">ali.alaaeldin.2025@gmail.com</a>
               </div>
             </div>
             <div className="flex items-start gap-3">

@@ -20,8 +20,11 @@ const roboto = Roboto({
 });
 
 export const metadata: Metadata = {
-  title: 'AliAlaa', // Updated site name
-  description: 'A dynamic portfolio for developers by Firebase Studio.',
+  title: 'AliAlaa - Full Stack Developer',
+  description: 'Portfolio of Ali Alaa, a passionate full-stack developer specializing in modern web applications.',
+  icons: {
+    icon: '/favicon.svg',
+  },
 };
 
 export default function RootLayout({
