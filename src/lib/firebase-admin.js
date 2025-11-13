@@ -1,6 +1,6 @@
 // @ts-check
-// Graceful Firebase Admin SDK initialization
-// This allows the app to work with or without Firebase credentials
+import { cert, initializeApp, getApps } from 'firebase-admin/app';
+import { getFirestore } from 'firebase-admin/firestore';
 
 /** @type {any} */
 let adminDb = null;
@@ -12,25 +12,23 @@ const isUsingMockCredentials = () => {
   const privateKey = process.env.FIREBASE_ADMIN_PRIVATE_KEY;
 
   return (
-    !projectId || 
-    !clientEmail || 
+    !projectId ||
+    !clientEmail ||
     !privateKey ||
-    projectId === 'your-project-id' || 
+    projectId === 'your-project-id' ||
     clientEmail === 'firebase-adminsdk-xxxxx@your-project.iam.gserviceaccount.com' ||
-    privateKey?.includes('PRIVATE KEY-----')
+    !privateKey.includes('-----BEGIN PRIVATE KEY-----') // Fixed: Check if key exists properly
   );
 };
 
 // Only initialize if we have real credentials
 if (!isUsingMockCredentials()) {
   try {
-    const { cert, initializeApp } = await import('firebase-admin/app');
-    const { getFirestore } = await import('firebase-admin/firestore');
-
     const projectId = process.env.FIREBASE_PROJECT_ID;
     const clientEmail = process.env.FIREBASE_ADMIN_CLIENT_EMAIL;
     const privateKeyEnv = process.env.FIREBASE_ADMIN_PRIVATE_KEY || '';
 
+    // Handle both escaped and unescaped newlines
     const privateKey = privateKeyEnv.replace(/\\n/g, '\n');
 
     const adminConfig = {
@@ -41,16 +39,19 @@ if (!isUsingMockCredentials()) {
       }),
     };
 
-    const adminApp = initializeApp(adminConfig);
+    // Prevent duplicate initialization
+    const adminApp = getApps().length === 0 ? initializeApp(adminConfig, 'admin') : getApps()[0];
     adminDb = getFirestore(adminApp);
-    console.log('✓ Firebase Admin SDK initialized');
+
+    console.log('✓ Firebase Admin SDK initialized successfully');
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error('Failed to initialize Firebase:', errorMessage);
+    console.error('❌ Failed to initialize Firebase Admin:', errorMessage);
+    console.error('Error details:', error);
     adminDb = null;
   }
 } else {
-  console.log('⚠️  Using mock mode - Firebase not configured. App will work without database features.');
+  console.warn('⚠️ Firebase Admin not configured - using mock mode');
 }
 
 export { adminDb };
